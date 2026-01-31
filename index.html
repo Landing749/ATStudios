@@ -1,1960 +1,995 @@
 <!doctype html>
-<html lang="en" class="h-full">
- <head>
+<html lang="en" class="scroll-smooth">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ATStudios | Athan Meir E. Obrero</title>
+  <title>ATStudios | Creative Digital Excellence</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <script src="/_sdk/data_sdk.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            'jakarta': ['Plus Jakarta Sans', 'sans-serif'],
-            'mono': ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            'bg-dark': '#030303',
-            'accent-blue': '#3b82f6',
-            'accent-purple': '#9333ea',
-          }
-        }
-      }
-    }
-  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body {
-      box-sizing: border-box;
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #ff6b35; --secondary: #f7931e; --accent: #ffd23f;
+      --dark: #0d1117; --dark-card: #1c2128; --text: #f0f6fc;
     }
-    
-    * {
-      scrollbar-width: thin;
-      scrollbar-color: #3b82f6 #030303;
-    }
-    
-    *::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    *::-webkit-scrollbar-track {
-      background: #030303;
-    }
-    
-    *::-webkit-scrollbar-thumb {
-      background: #3b82f6;
-      border-radius: 3px;
-    }
-
-    .glass {
-      background: rgba(255, 255, 255, 0.03);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .glass-strong {
-      background: rgba(255, 255, 255, 0.06);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .glow-blue {
-      box-shadow: 0 0 40px rgba(59, 130, 246, 0.3), 0 0 80px rgba(59, 130, 246, 0.1);
-    }
-
-    .glow-purple {
-      box-shadow: 0 0 40px rgba(147, 51, 234, 0.3), 0 0 80px rgba(147, 51, 234, 0.1);
-    }
-
-    .text-gradient {
-      background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .bg-gradient-radial {
-      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
-    }
-
-    @keyframes typewriter {
-      from { width: 0; }
-      to { width: 100%; }
-    }
-
-    @keyframes blink {
-      0%, 50% { border-color: #3b82f6; }
-      51%, 100% { border-color: transparent; }
-    }
-
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes scaleIn {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-
-    @keyframes marquee {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    @keyframes pulse-glow {
-      0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
-      50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.6), 0 0 60px rgba(147, 51, 234, 0.3); }
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .animate-fadeInUp {
-      animation: fadeInUp 0.8s ease-out forwards;
-    }
-
-    .animate-fadeIn {
-      animation: fadeIn 0.6s ease-out forwards;
-    }
-
-    .animate-scaleIn {
-      animation: scaleIn 0.5s ease-out forwards;
-    }
-
-    .animate-marquee {
-      animation: marquee 30s linear infinite;
-    }
-
-    .animate-pulse-glow {
-      animation: pulse-glow 3s ease-in-out infinite;
-    }
-
-    .animate-float {
-      animation: float 6s ease-in-out infinite;
-    }
-
-    .delay-100 { animation-delay: 0.1s; }
-    .delay-200 { animation-delay: 0.2s; }
-    .delay-300 { animation-delay: 0.3s; }
-    .delay-400 { animation-delay: 0.4s; }
-    .delay-500 { animation-delay: 0.5s; }
-
-    .loading-bar {
-      background: linear-gradient(90deg, #3b82f6, #9333ea, #3b82f6);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s ease-in-out infinite;
-    }
-
-    @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
-    }
-
-    .card-hover {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .card-hover:hover {
-      transform: translateY(-8px) scale(1.02);
-    }
-
-    .popular-card {
-      transform: scale(1.05);
-    }
-
-    .popular-card:hover {
-      transform: scale(1.08) translateY(-8px);
-    }
-
-    .bento-item {
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .bento-item:hover {
-      transform: scale(1.03);
-      z-index: 10;
-    }
-
-    .nav-link {
-      position: relative;
-    }
-
-    .nav-link::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, #3b82f6, #9333ea);
-      transition: width 0.3s ease;
-    }
-
-    .nav-link:hover::after {
-      width: 100%;
-    }
-
-    .input-focus {
-      transition: all 0.3s ease;
-    }
-
-    .input-focus:focus {
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-    }
-
-    .chat-bubble-client {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.2));
-      border: 1px solid rgba(59, 130, 246, 0.3);
-    }
-
-    .chat-bubble-admin {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .status-pending { color: #fbbf24; }
-    .status-active { color: #22c55e; }
-    .status-completed { color: #3b82f6; }
-
-    .unread-indicator {
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-
-    .progress-step {
-      position: relative;
-    }
-
-    .progress-step::after {
-      content: '';
-      position: absolute;
-      left: 20px;
-      top: 40px;
-      bottom: -20px;
-      width: 2px;
-      background: rgba(59, 130, 246, 0.2);
-    }
-
-    .progress-step:last-child::after {
-      display: none;
-    }
-
-    .receipt-container {
-      background: white;
-      color: #1f2937;
-      font-family: 'Courier New', monospace;
-    }
+    body { background: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #0d1117 100%); color: #f0f6fc; font-family: 'Raleway', sans-serif; overflow-x: hidden; line-height: 1.7; }
+    *::-webkit-scrollbar { width: 10px; }
+    *::-webkit-scrollbar-track { background: var(--dark); }
+    *::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--primary), var(--secondary)); border-radius: 5px; }
+    h1, h2, h3, h4, h5, h6 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+    .font-mono { font-family: 'JetBrains Mono', monospace; }
+    .gradient-text { background: linear-gradient(120deg, var(--primary), var(--secondary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; background-size: 200% 200%; animation: gradient-shift 8s ease infinite; }
+    @keyframes gradient-shift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+    .glass { background: rgba(28, 33, 40, 0.6); backdrop-filter: blur(20px); border: 1px solid rgba(255, 107, 53, 0.1); }
+    .glass-strong { background: rgba(28, 33, 40, 0.85); backdrop-filter: blur(30px); border: 1px solid rgba(255, 107, 53, 0.2); }
+    .glow-primary { box-shadow: 0 0 60px rgba(255, 107, 53, 0.4); }
+    .mesh-gradient { background: radial-gradient(at 20% 30%, rgba(255, 107, 53, 0.15) 0px, transparent 50%), radial-gradient(at 80% 70%, rgba(247, 147, 30, 0.15) 0px, transparent 50%), radial-gradient(at 50% 50%, rgba(255, 210, 63, 0.1) 0px, transparent 50%), #0d1117; }
+    .grid-background { background-image: linear-gradient(rgba(255, 107, 53, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 107, 53, 0.05) 1px, transparent 1px); background-size: 50px 50px; animation: grid-move 20s linear infinite; }
+    @keyframes grid-move { 0% { background-position: 0 0; } 100% { background-position: 50px 50px; } }
+    @keyframes float { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(5deg); } }
+    @keyframes slide-in-up { from { opacity: 0; transform: translateY(60px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes slide-in-left { from { opacity: 0; transform: translateX(-80px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slide-in-right { from { opacity: 0; transform: translateX(80px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes scale-in { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+    .animate-float { animation: float 8s ease-in-out infinite; }
+    .animate-slide-in-up { animation: slide-in-up 0.8s ease-out forwards; }
+    .animate-slide-in-left { animation: slide-in-left 0.8s ease-out forwards; }
+    .animate-slide-in-right { animation: slide-in-right 0.8s ease-out forwards; }
+    .animate-fade-in { animation: fade-in 0.8s ease-out forwards; }
+    .animate-scale-in { animation: scale-in 0.6s ease-out forwards; }
+    .delay-100 { animation-delay: 0.1s; } .delay-200 { animation-delay: 0.2s; } .delay-300 { animation-delay: 0.3s; }
+    .delay-400 { animation-delay: 0.4s; } .delay-500 { animation-delay: 0.5s; } .delay-600 { animation-delay: 0.6s; }
+    .btn { position: relative; overflow: hidden; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; font-size: 0.9rem; }
+    .btn:before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent); transition: left 0.6s; }
+    .btn:hover:before { left: 100%; }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 16px 40px; border-radius: 50px; border: none; cursor: pointer; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.3); }
+    .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 20px 50px rgba(255, 107, 53, 0.5); }
+    .btn-secondary { background: transparent; color: var(--text); padding: 16px 40px; border: 2px solid var(--primary); border-radius: 50px; cursor: pointer; position: relative; z-index: 1; }
+    .btn-secondary:after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50px; opacity: 0; transition: opacity 0.3s; z-index: -1; }
+    .btn-secondary:hover:after { opacity: 1; }
+    .btn-secondary:hover { color: white; border-color: transparent; transform: translateY(-4px); }
+    .card { background: var(--dark-card); border-radius: 24px; padding: 32px; border: 1px solid rgba(255, 107, 53, 0.15); transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; overflow: hidden; }
+    .card:before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent)); transform: scaleX(0); transition: transform 0.5s; }
+    .card:hover:before { transform: scaleX(1); }
+    .card:hover { border-color: rgba(255, 107, 53, 0.5); transform: translateY(-12px); box-shadow: 0 30px 60px rgba(255, 107, 53, 0.25); }
+    .card-feature { border-color: var(--primary); box-shadow: 0 20px 50px rgba(255, 107, 53, 0.3); }
+    .stat-number { font-size: 4rem; font-weight: 900; line-height: 1; }
+    .testimonial-card { background: linear-gradient(135deg, rgba(255, 107, 53, 0.1), rgba(247, 147, 30, 0.05)); border-left: 4px solid var(--primary); }
+    .process-number { width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 900; margin: 0 auto 20px; box-shadow: 0 10px 30px rgba(255, 107, 53, 0.4); }
+    .skill-badge { background: rgba(255, 107, 53, 0.15); border: 1px solid rgba(255, 107, 53, 0.3); padding: 8px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; transition: all 0.3s; display: inline-block; }
+    .skill-badge:hover { background: rgba(255, 107, 53, 0.25); border-color: var(--primary); transform: translateY(-2px); }
+    .faq-item { border-bottom: 1px solid rgba(255, 107, 53, 0.1); transition: all 0.3s; }
+    .faq-item:hover { background: rgba(255, 107, 53, 0.05); }
+    .faq-question { cursor: pointer; padding: 24px; font-weight: 700; display: flex; justify-content: space-between; align-items: center; }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, padding 0.4s ease; padding: 0 24px; }
+    .faq-item.active .faq-answer { max-height: 500px; padding: 0 24px 24px; }
+    .faq-icon { transition: transform 0.3s; }
+    .faq-item.active .faq-icon { transform: rotate(180deg); }
+    .modal { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+    .modal.active { display: flex; }
+    .modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px); }
+    .modal-content { position: relative; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
+    .toast { position: fixed; bottom: 30px; right: 30px; z-index: 2000; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; transition: all 0.3s; }
+    nav.scrolled { background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(20px); box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3); }
+    .float-element { position: absolute; pointer-events: none; opacity: 0.6; }
+    .admin-table { width: 100%; border-collapse: collapse; }
+    .admin-table th { background: rgba(255, 107, 53, 0.1); padding: 12px; text-align: left; font-weight: 700; }
+    .admin-table td { padding: 12px; border-bottom: 1px solid rgba(255, 107, 53, 0.1); }
+    .admin-table tr:hover { background: rgba(255, 107, 53, 0.05); }
+    .status-badge { padding: 4px 12px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+    .status-pending { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+    .status-active { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+    .status-completed { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
+    @media (max-width: 768px) { .stat-number { font-size: 2.5rem; } .process-number { width: 60px; height: 60px; font-size: 1.5rem; } }
   </style>
-  <style>@view-transition { navigation: auto; }</style>
- </head>
- <body class="h-full bg-bg-dark font-jakarta text-white overflow-auto">
-  <div id="app-container" class="w-full h-full"><!-- Loading Screen -->
-   <div id="loading-screen" class="fixed inset-0 bg-bg-dark z-50 flex flex-col items-center justify-center">
-    <div id="loading-text" class="font-mono text-4xl md:text-6xl font-bold text-gradient mb-8"></div>
-    <div class="w-64 md:w-96 h-1 bg-white/10 rounded-full overflow-hidden">
-     <div id="loading-bar" class="h-full loading-bar rounded-full transition-all duration-300" style="width: 0%"></div>
-    </div>
-    <div id="loading-percent" class="font-mono text-sm text-white/50 mt-4">
-     0%
-    </div>
-   </div><!-- Main Content -->
-   <div id="main-content" class="opacity-0 transition-opacity duration-1000"><!-- Navigation -->
-    <nav class="fixed top-0 left-0 right-0 z-40 glass">
-     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16"><a href="#" class="font-mono text-xl font-bold text-gradient">AT<span class="text-white">Studios</span></a>
-       <div class="hidden md:flex items-center gap-8"><a href="#services" class="nav-link text-sm text-white/70 hover:text-white transition-colors">Services</a> <a href="#portfolio" class="nav-link text-sm text-white/70 hover:text-white transition-colors">Portfolio</a> <a href="#testimonials" class="nav-link text-sm text-white/70 hover:text-white transition-colors">Testimonials</a> <button onclick="openTrackerModal()" class="px-4 py-2 glass rounded-lg text-sm font-medium hover:bg-white/10 transition-all"> Track Inquiry </button>
-       </div><button onclick="toggleMobileMenu()" class="md:hidden p-2 text-white/70 hover:text-white">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg></button>
-      </div>
-     </div><!-- Mobile Menu -->
-     <div id="mobile-menu" class="hidden md:hidden glass-strong">
-      <div class="px-4 py-4 space-y-3"><a href="#services" class="block text-white/70 hover:text-white transition-colors py-2">Services</a> <a href="#portfolio" class="block text-white/70 hover:text-white transition-colors py-2">Portfolio</a> <a href="#testimonials" class="block text-white/70 hover:text-white transition-colors py-2">Testimonials</a> <button onclick="openTrackerModal()" class="w-full px-4 py-2 glass rounded-lg text-sm font-medium hover:bg-white/10 transition-all"> Track Inquiry </button>
-      </div>
-     </div>
-    </nav><!-- Hero Section -->
-    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-16"><!-- Background Effects -->
-     <div class="absolute inset-0 bg-gradient-radial"></div>
-     <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-accent-blue/10 rounded-full blur-3xl animate-float"></div>
-     <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent-purple/10 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
-     <div class="relative z-10 text-center px-4 max-w-5xl mx-auto">
-      <div class="overflow-hidden mb-6">
-       <h1 id="hero-name" class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight opacity-0 animate-fadeInUp" style="animation-delay: 0.2s;">ATHAN MEIR E. OBRERO</h1>
-      </div>
-      <div class="h-10 md:h-12 mb-8 flex items-center justify-center"><span id="typewriter-text" class="font-mono text-lg md:text-2xl text-accent-blue"></span> <span class="w-0.5 h-6 md:h-8 bg-accent-blue ml-1 animate-pulse"></span>
-      </div>
-      <p class="text-white/60 text-base md:text-lg max-w-2xl mx-auto mb-10 opacity-0 animate-fadeInUp" style="animation-delay: 0.6s;">Crafting digital experiences that blend innovative design with powerful functionality. Let's build something extraordinary together.</p>
-      <div class="flex flex-col sm:flex-row gap-4 justify-center opacity-0 animate-fadeInUp" style="animation-delay: 0.8s;"><button onclick="scrollToServices()" class="px-8 py-4 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-semibold text-lg hover:opacity-90 transition-all animate-pulse-glow"> Start Project </button> <button onclick="openTrackerModal()" class="px-8 py-4 glass rounded-xl font-semibold text-lg hover:bg-white/10 transition-all"> Track Inquiry </button>
-      </div>
-     </div><!-- Scroll Indicator -->
-     <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 animate-fadeIn" style="animation-delay: 1.2s;">
-      <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-       <div class="w-1 h-3 bg-white/50 rounded-full mt-2 animate-bounce"></div>
-      </div>
-     </div>
-    </section><!-- Services Section -->
-    <section id="services" class="py-20 md:py-32 px-4 relative">
-     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-16"><span class="font-mono text-accent-blue text-sm tracking-wider">SERVICES</span>
-       <h2 class="text-3xl md:text-5xl font-bold mt-4">Choose Your Plan</h2>
-       <p class="text-white/60 mt-4 max-w-2xl mx-auto">Flexible packages designed to meet your unique needs. All prices are negotiable based on project scope.</p>
-      </div>
-      <div class="grid md:grid-cols-3 gap-6 md:gap-8 items-center"><!-- Bronze -->
-       <div class="glass rounded-2xl p-8 card-hover">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-600 to-amber-800 flex items-center justify-center mb-6">
-         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-         </svg>
-        </div>
-        <h3 id="bronze-title" class="text-2xl font-bold mb-2">Bronze</h3>
-        <p class="text-white/60 text-sm mb-6">Perfect for small projects and landing pages</p>
-        <ul class="space-y-3 mb-8">
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Single page website</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Mobile responsive</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Basic animations</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> 3 revisions</li>
-        </ul><button onclick="openInquiryModal('Bronze')" class="w-full py-3 glass rounded-xl font-medium hover:bg-white/10 transition-all"> Negotiate </button>
-       </div><!-- Silver (Popular) -->
-       <div class="glass rounded-2xl p-8 popular-card glow-blue relative">
-        <div class="absolute -top-3 left-1/2 transform -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-accent-blue to-accent-purple rounded-full text-xs font-semibold">
-         POPULAR
-        </div>
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-slate-400 to-slate-600 flex items-center justify-center mb-6">
-         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-         </svg>
-        </div>
-        <h3 id="silver-title" class="text-2xl font-bold mb-2">Silver</h3>
-        <p class="text-white/60 text-sm mb-6">Ideal for business websites and portfolios</p>
-        <ul class="space-y-3 mb-8">
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Up to 5 pages</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Advanced animations</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Contact form integration</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> SEO optimization</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> 5 revisions</li>
-        </ul><button onclick="openInquiryModal('Silver')" class="w-full py-3 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-medium hover:opacity-90 transition-all"> Negotiate </button>
-       </div><!-- Gold -->
-       <div class="glass rounded-2xl p-8 card-hover">
-        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500 to-amber-600 flex items-center justify-center mb-6">
-         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-         </svg>
-        </div>
-        <h3 id="gold-title" class="text-2xl font-bold mb-2">Gold</h3>
-        <p class="text-white/60 text-sm mb-6">Complete solution for complex applications</p>
-        <ul class="space-y-3 mb-8">
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Unlimited pages</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Full-stack development</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Database integration</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Admin dashboard</li>
-         <li class="flex items-center gap-3 text-sm text-white/80">
-          <svg class="w-5 h-5 text-accent-blue flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg> Priority support &amp; unlimited revisions</li>
-        </ul><button onclick="openInquiryModal('Gold')" class="w-full py-3 glass rounded-xl font-medium hover:bg-white/10 transition-all"> Negotiate </button>
-       </div>
-      </div>
-     </div>
-    </section><!-- Portfolio Section -->
-    <section id="portfolio" class="py-20 md:py-32 px-4 relative">
-     <div class="max-w-7xl mx-auto">
-      <div class="text-center mb-16"><span class="font-mono text-accent-purple text-sm tracking-wider">PORTFOLIO</span>
-       <h2 class="text-3xl md:text-5xl font-bold mt-4">Featured Work</h2>
-       <p class="text-white/60 mt-4 max-w-2xl mx-auto">A showcase of projects that demonstrate my expertise in creating impactful digital experiences.</p>
-      </div><!-- Bento Grid -->
-      <div id="portfolio-grid" class="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]"><!-- Portfolio items will be dynamically loaded -->
-       <div class="col-span-2 row-span-2 glass rounded-2xl p-6 bento-item flex flex-col justify-end relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-t from-bg-dark/90 to-transparent"></div>
-        <div class="relative z-10"><span class="font-mono text-xs text-accent-blue">Web App</span>
-         <h3 class="text-xl font-bold mt-1">E-Commerce Platform</h3>
-         <p class="text-white/60 text-sm mt-2">Full-stack shopping experience with real-time inventory</p>
-        </div>
-        <div class="absolute top-4 right-4 w-10 h-10 glass rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-         </svg>
-        </div>
-       </div>
-       <div class="glass rounded-2xl p-4 bento-item flex flex-col justify-end relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-t from-bg-dark/90 to-transparent"></div>
-        <div class="relative z-10"><span class="font-mono text-xs text-accent-purple">Mobile</span>
-         <h3 class="text-lg font-bold mt-1">Fitness Tracker</h3>
-        </div>
-       </div>
-       <div class="glass rounded-2xl p-4 bento-item flex flex-col justify-end relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-t from-bg-dark/90 to-transparent"></div>
-        <div class="relative z-10"><span class="font-mono text-xs text-accent-blue">Dashboard</span>
-         <h3 class="text-lg font-bold mt-1">Analytics Suite</h3>
-        </div>
-       </div>
-       <div class="col-span-2 glass rounded-2xl p-4 bento-item flex flex-col justify-end relative overflow-hidden group">
-        <div class="absolute inset-0 bg-gradient-to-t from-bg-dark/90 to-transparent"></div>
-        <div class="relative z-10"><span class="font-mono text-xs text-accent-purple">SaaS</span>
-         <h3 class="text-lg font-bold mt-1">Project Management Tool</h3>
-         <p class="text-white/60 text-sm mt-1">Collaborative workspace for teams</p>
-        </div>
-       </div>
-      </div><!-- Dynamic Portfolio Items -->
-      <div id="dynamic-portfolio" class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4"><!-- Dynamically added projects will appear here -->
-      </div>
-     </div>
-    </section><!-- Testimonials Section -->
-    <section id="testimonials" class="py-20 md:py-32 relative overflow-hidden">
-     <div class="max-w-7xl mx-auto px-4 mb-12">
-      <div class="text-center"><span class="font-mono text-accent-blue text-sm tracking-wider">TESTIMONIALS</span>
-       <h2 class="text-3xl md:text-5xl font-bold mt-4">Client Stories</h2>
-      </div>
-     </div><!-- Marquee Container -->
-     <div class="relative">
-      <div class="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-bg-dark to-transparent z-10"></div>
-      <div class="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-bg-dark to-transparent z-10"></div>
-      <div class="overflow-hidden">
-       <div id="testimonial-track" class="flex gap-6 animate-marquee" style="width: fit-content;"><!-- Testimonials will be duplicated for infinite scroll -->
-        <div class="testimonial-item flex-shrink-0 w-80 glass rounded-2xl p-6">
-         <div class="flex items-center gap-4 mb-4">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center text-xl font-bold">
-           J
-          </div>
+</head>
+<body>
+  
+  <!-- Floating Background -->
+  <div class="float-element animate-float" style="top: 10%; left: 5%; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255, 107, 53, 0.1), transparent); border-radius: 50%;"></div>
+  <div class="float-element animate-float delay-300" style="top: 60%; right: 10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(247, 147, 30, 0.1), transparent); border-radius: 50%;"></div>
+
+  <!-- Navigation -->
+  <nav id="navbar" class="py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center">
+        <div class="flex items-center gap-3 animate-slide-in-left">
+          <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center font-bold text-2xl shadow-lg">AT</div>
           <div>
-           <h4 class="font-semibold">John Smith</h4>
-           <p class="text-white/60 text-sm">CEO, TechStart</p>
+            <h1 class="text-2xl font-bold gradient-text">ATStudios</h1>
+            <p class="text-xs text-gray-400 font-mono">Digital Excellence</p>
           </div>
-         </div>
-         <p class="text-white/80 text-sm">"Exceptional work! Athan delivered our project ahead of schedule with incredible attention to detail."</p>
-         <div class="flex gap-1 mt-4">
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-         </div>
         </div>
-        <div class="testimonial-item flex-shrink-0 w-80 glass rounded-2xl p-6">
-         <div class="flex items-center gap-4 mb-4">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-purple to-pink-500 flex items-center justify-center text-xl font-bold">
-           S
-          </div>
-          <div>
-           <h4 class="font-semibold">Sarah Chen</h4>
-           <p class="text-white/60 text-sm">Founder, DesignCo</p>
-          </div>
-         </div>
-         <p class="text-white/80 text-sm">"The best developer I've worked with. Creative solutions and flawless execution every time."</p>
-         <div class="flex gap-1 mt-4">
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-         </div>
-        </div>
-        <div class="testimonial-item flex-shrink-0 w-80 glass rounded-2xl p-6">
-         <div class="flex items-center gap-4 mb-4">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-teal-500 flex items-center justify-center text-xl font-bold">
-           M
-          </div>
-          <div>
-           <h4 class="font-semibold">Mike Rodriguez</h4>
-           <p class="text-white/60 text-sm">CTO, InnovateLab</p>
-          </div>
-         </div>
-         <p class="text-white/80 text-sm">"Transformed our vision into reality. Professional, skilled, and incredibly responsive."</p>
-         <div class="flex gap-1 mt-4">
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-         </div>
-        </div>
-        <div class="testimonial-item flex-shrink-0 w-80 glass rounded-2xl p-6">
-         <div class="flex items-center gap-4 mb-4">
-          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-xl font-bold">
-           E
-          </div>
-          <div>
-           <h4 class="font-semibold">Emily Watson</h4>
-           <p class="text-white/60 text-sm">Director, CreativeHub</p>
-          </div>
-         </div>
-         <p class="text-white/80 text-sm">"Outstanding quality and communication. Would definitely work with Athan again!"</p>
-         <div class="flex gap-1 mt-4">
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-          <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewbox="0 0 20 20">
-           <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-          </svg>
-         </div>
-        </div><!-- Duplicates for seamless loop -->
-       </div>
-      </div>
-     </div><!-- Dynamic Testimonials Container -->
-     <div id="dynamic-testimonials" class="hidden"></div>
-    </section><!-- Footer -->
-    <footer class="py-12 px-4 border-t border-white/10">
-     <div class="max-w-7xl mx-auto">
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-       <div class="flex items-center gap-4"><span class="font-mono text-xl font-bold text-gradient">AT<span class="text-white">Studios</span></span>
-       </div>
-       <div class="flex items-center gap-6 text-white/60 text-sm"><a href="#services" class="hover:text-white transition-colors">Services</a> <a href="#portfolio" class="hover:text-white transition-colors">Portfolio</a> <a href="#testimonials" class="hover:text-white transition-colors">Testimonials</a>
-       </div>
-       <div class="flex items-center gap-2 text-white/40 text-sm"><button id="secret-trigger" class="hover:text-white transition-colors cursor-pointer">©</button> <span>2024 ATStudios. All rights reserved.</span>
-       </div>
-      </div>
-     </div>
-    </footer>
-   </div><!-- Inquiry Modal -->
-   <div id="inquiry-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeInquiryModal()"></div>
-    <div class="relative glass-strong rounded-2xl w-full max-w-lg max-h-[90%] overflow-y-auto animate-scaleIn">
-     <div class="p-6">
-      <div class="flex items-center justify-between mb-6">
-       <h3 class="text-2xl font-bold">Start Your Project</h3><button onclick="closeInquiryModal()" class="p-2 hover:bg-white/10 rounded-lg transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg></button>
-      </div>
-      <form id="inquiry-form" onsubmit="submitInquiry(event)">
-       <div class="space-y-4">
-        <div><label for="client-name" class="block text-sm text-white/70 mb-2">Your Name</label> <input type="text" id="client-name" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus">
-        </div>
-        <div><label for="client-email" class="block text-sm text-white/70 mb-2">Email Address</label> <input type="email" id="client-email" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus">
-        </div>
-        <div><label for="selected-plan" class="block text-sm text-white/70 mb-2">Selected Plan</label> <select id="selected-plan" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white focus:outline-none focus:border-accent-blue input-focus"> <option value="Bronze" class="bg-bg-dark">Bronze</option> <option value="Silver" class="bg-bg-dark">Silver</option> <option value="Gold" class="bg-bg-dark">Gold</option> </select>
-        </div>
-        <div><label for="project-details" class="block text-sm text-white/70 mb-2">Project Details</label> <textarea id="project-details" rows="4" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus resize-none" placeholder="Describe your project..."></textarea>
-        </div>
-       </div><button type="submit" id="inquiry-submit-btn" class="w-full mt-6 py-4 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-2"> <span>Submit Inquiry</span>
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-        </svg></button>
-      </form>
-     </div>
-    </div>
-   </div><!-- Receipt Modal -->
-   <div id="receipt-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeReceiptModal()"></div>
-    <div class="relative glass-strong rounded-2xl w-full max-w-md max-h-[90%] overflow-y-auto animate-scaleIn">
-     <div class="p-6">
-      <div class="flex items-center justify-between mb-6">
-       <h3 class="text-2xl font-bold">Inquiry Receipt</h3><button onclick="closeReceiptModal()" class="p-2 hover:bg-white/10 rounded-lg transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg></button>
-      </div><!-- Receipt Content -->
-      <div id="receipt-content" class="receipt-container p-6 rounded-xl mb-4">
-       <div class="text-center border-b-2 border-dashed border-gray-400 pb-4 mb-4">
-        <div class="text-3xl font-bold mb-2">
-         ATStudios
-        </div>
-        <div class="text-sm">
-         Athan Meir E. Obrero
-        </div>
-        <div class="text-xs text-gray-600">
-         Full Stack Developer
-        </div>
-       </div>
-       <div class="space-y-2 text-sm mb-4">
-        <div class="flex justify-between"><span>DATE:</span> <span id="receipt-date">-</span>
-        </div>
-        <div class="flex justify-between"><span>INQUIRY ID:</span> <span id="receipt-id" class="font-bold">-</span>
-        </div>
-       </div>
-       <div class="border-t-2 border-dashed border-gray-400 pt-4 mb-4">
-        <div class="font-bold mb-2">
-         CLIENT INFORMATION
-        </div>
-        <div class="space-y-1 text-sm">
-         <div class="flex justify-between"><span>Name:</span> <span id="receipt-name">-</span>
-         </div>
-         <div class="flex justify-between"><span>Email:</span> <span id="receipt-email" class="text-xs">-</span>
-         </div>
-        </div>
-       </div>
-       <div class="border-t-2 border-dashed border-gray-400 pt-4 mb-4">
-        <div class="font-bold mb-2">
-         SERVICE DETAILS
-        </div>
-        <div class="space-y-1 text-sm">
-         <div class="flex justify-between"><span>Plan:</span> <span id="receipt-plan" class="font-bold">-</span>
-         </div>
-         <div class="mt-2">
-          <div class="font-semibold">
-           Project Description:
-          </div>
-          <div id="receipt-details" class="text-xs mt-1 whitespace-pre-wrap">
-           -
-          </div>
-         </div>
-        </div>
-       </div>
-       <div class="border-t-2 border-dashed border-gray-400 pt-4 mb-4">
-        <div class="text-center space-y-1">
-         <div class="text-xs text-gray-600">
-          Status: Pending Review
-         </div>
-         <div class="text-xs text-gray-600">
-          Next Steps: Await confirmation
-         </div>
-        </div>
-       </div>
-       <div class="border-t-2 border-double border-gray-800 pt-4 text-center">
-        <div class="text-xs text-gray-600 mb-2">
-         THANK YOU FOR YOUR INQUIRY!
-        </div>
-        <div class="text-xs text-gray-600">
-         Track your project with ID above
-        </div>
-       </div>
-      </div><button onclick="downloadReceipt()" class="w-full py-3 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-medium hover:opacity-90 transition-all mb-2 flex items-center justify-center gap-2">
-       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-       </svg><span>Download Receipt</span> </button> <button onclick="closeReceiptModal()" class="w-full py-3 glass rounded-xl font-medium hover:bg-white/10 transition-all"> Close </button>
-     </div>
-    </div>
-   </div><!-- Tracker Modal -->
-   <div id="tracker-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeTrackerModal()"></div>
-    <div class="relative glass-strong rounded-2xl w-full max-w-md animate-scaleIn">
-     <div class="p-6">
-      <div class="flex items-center justify-between mb-6">
-       <h3 class="text-2xl font-bold">Track Your Inquiry</h3><button onclick="closeTrackerModal()" class="p-2 hover:bg-white/10 rounded-lg transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg></button>
-      </div>
-      <form onsubmit="trackInquiry(event)">
-       <div><label for="tracker-id" class="block text-sm text-white/70 mb-2">Inquiry ID</label> <input type="text" id="tracker-id" placeholder="ATH-XXXXXX" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus font-mono">
-       </div>
-       <p id="tracker-error" class="text-red-400 text-sm mt-2 hidden">Inquiry not found. Please check your ID.</p><button type="submit" id="tracker-submit-btn" class="w-full mt-6 py-4 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-semibold hover:opacity-90 transition-all"> Track Inquiry </button>
-      </form>
-     </div>
-    </div>
-   </div><!-- Client Chat Portal -->
-   <div id="client-portal" class="fixed inset-0 z-50 hidden">
-    <div class="w-full h-full bg-bg-dark flex flex-col"><!-- Portal Header -->
-     <div class="glass border-b border-white/10 px-4 py-4">
-      <div class="max-w-4xl mx-auto flex items-center justify-between">
-       <div>
-        <div class="font-mono text-accent-blue text-sm" id="portal-inquiry-id">
-         ATH-000000
-        </div>
-        <h2 class="text-xl font-bold">Project Portal</h2>
-       </div>
-       <div class="flex items-center gap-4">
-        <div class="text-right">
-         <div class="text-sm text-white/60">
-          Status
-         </div>
-         <div id="portal-status" class="font-medium status-pending">
-          Pending
-         </div>
-        </div><button onclick="closeClientPortal()" class="p-2 hover:bg-white/10 rounded-lg transition-colors">
-         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-         </svg></button>
-       </div>
-      </div>
-     </div><!-- Tabs -->
-     <div class="glass border-b border-white/10">
-      <div class="max-w-4xl mx-auto flex"><button onclick="switchClientTab('chat')" class="client-tab px-6 py-3 font-medium border-b-2 transition-colors" data-tab="chat"> Chat </button> <button onclick="switchClientTab('progress')" class="client-tab px-6 py-3 font-medium border-b-2 transition-colors" data-tab="progress"> Progress Updates </button>
-      </div>
-     </div><!-- Chat Tab -->
-     <div id="client-chat-tab" class="flex-1 flex flex-col overflow-hidden">
-      <div id="client-chat-messages" class="flex-1 overflow-y-auto p-4">
-       <div class="max-w-4xl mx-auto space-y-4"><!-- Messages will be loaded here -->
-       </div>
-      </div>
-      <div class="glass border-t border-white/10 p-4">
-       <div class="max-w-4xl mx-auto">
-        <form onsubmit="sendClientMessage(event)" class="flex gap-3"><input type="text" id="client-message-input" placeholder="Type your message..." class="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus"> <button type="submit" id="client-send-btn" class="px-6 py-3 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-medium hover:opacity-90 transition-all"> Send </button>
-        </form>
-       </div>
-      </div>
-     </div><!-- Progress Tab -->
-     <div id="client-progress-tab" class="hidden flex-1 overflow-y-auto p-4">
-      <div class="max-w-4xl mx-auto">
-       <div id="progress-timeline" class="space-y-6"><!-- Progress updates will be loaded here -->
-       </div>
-      </div>
-     </div>
-    </div>
-   </div><!-- Secret Admin Input -->
-   <div id="secret-input-container" class="fixed bottom-4 right-4 z-40 hidden"><input type="password" id="secret-input" maxlength="3" class="w-16 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-white text-center font-mono focus:outline-none focus:border-accent-blue" placeholder="***">
-   </div><!-- Admin Dashboard -->
-   <div id="admin-dashboard" class="fixed inset-0 z-50 hidden">
-    <div class="w-full h-full bg-bg-dark flex flex-col md:flex-row"><!-- Mobile Admin Header with Tabs -->
-     <div class="md:hidden glass-strong border-b border-white/10">
-      <div class="flex items-center justify-between p-4 border-b border-white/10">
-       <div class="font-mono text-xl font-bold text-gradient">
-        Admin Panel
-       </div><button onclick="closeAdminDashboard()" class="p-2 hover:bg-white/10 rounded-lg transition-colors">
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg></button>
-      </div>
-      <div class="flex overflow-x-auto"><button onclick="switchAdminTab('inquiries')" class="admin-tab flex-shrink-0 flex items-center gap-2 px-4 py-3 border-b-2 border-transparent text-white/60" data-tab="inquiries">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg><span class="text-sm font-medium">Inquiries</span> <span id="unread-count-mobile" class="bg-accent-blue text-xs px-2 py-0.5 rounded-full hidden">0</span> </button> <button onclick="switchAdminTab('projects')" class="admin-tab flex-shrink-0 flex items-center gap-2 px-4 py-3 border-b-2 border-transparent text-white/60" data-tab="projects">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg><span class="text-sm font-medium">Portfolio</span> </button> <button onclick="switchAdminTab('testimonials')" class="admin-tab flex-shrink-0 flex items-center gap-2 px-4 py-3 border-b-2 border-transparent text-white/60" data-tab="testimonials">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg><span class="text-sm font-medium">Testimonials</span> </button>
-      </div>
-     </div><!-- Desktop Admin Sidebar -->
-     <div class="hidden md:flex w-64 glass-strong border-r border-white/10 flex-col">
-      <div class="p-6 border-b border-white/10">
-       <div class="font-mono text-xl font-bold text-gradient">
-        Admin Panel
-       </div>
-      </div>
-      <nav class="flex-1 p-4 space-y-2"><button onclick="switchAdminTab('inquiries')" class="admin-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-white/10 transition-colors" data-tab="inquiries">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-        </svg><span>Inquiries</span> <span id="unread-count" class="ml-auto bg-accent-blue text-xs px-2 py-0.5 rounded-full hidden">0</span> </button> <button onclick="switchAdminTab('projects')" class="admin-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-white/10 transition-colors" data-tab="projects">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-        </svg><span>Portfolio</span> </button> <button onclick="switchAdminTab('testimonials')" class="admin-tab w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-white/10 transition-colors" data-tab="testimonials">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg><span>Testimonials</span> </button>
-      </nav>
-      <div class="p-4 border-t border-white/10"><button onclick="closeAdminDashboard()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left hover:bg-white/10 transition-colors text-white/60">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-        </svg><span>Exit Admin</span> </button>
-      </div>
-     </div><!-- Admin Content -->
-     <div class="flex-1 flex flex-col overflow-hidden"><!-- Desktop Admin Header -->
-      <div class="hidden md:block glass border-b border-white/10 px-6 py-4">
-       <h2 id="admin-content-title" class="text-xl font-bold">Inquiry Hub</h2>
-      </div><!-- Admin Panels -->
-      <div class="flex-1 overflow-hidden"><!-- Inquiries Panel -->
-       <div id="admin-inquiries-panel" class="h-full flex flex-col md:flex-row"><!-- Mobile: Show either list or chat --> <!-- Desktop: Show both side by side --> <!-- Inquiry List -->
-        <div id="inquiry-list-container" class="w-full md:w-80 border-r border-white/10 overflow-y-auto">
-         <div id="inquiry-list" class="p-4 space-y-2"><!-- Inquiry items will be loaded here -->
-         </div>
-        </div><!-- Chat Area -->
-        <div class="flex-1 flex flex-col">
-         <div id="admin-chat-placeholder" class="flex-1 flex items-center justify-center text-white/40">
-          <div class="text-center p-4">
-           <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-           </svg>
-           <p>Select an inquiry to view chat</p>
-          </div>
-         </div>
-         <div id="admin-chat-area" class="hidden flex-1 flex flex-col"><!-- Chat Header -->
-          <div class="p-4 border-b border-white/10 flex items-center justify-between"><button onclick="closeMobileChat()" class="md:hidden p-2 hover:bg-white/10 rounded-lg transition-colors mr-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-            </svg></button>
-           <div class="flex-1">
-            <div class="font-mono text-accent-blue text-sm" id="admin-chat-id">
-             ATH-000000
-            </div>
-            <div class="text-sm text-white/60" id="admin-chat-client">
-             Client Name
-            </div>
-           </div><select id="admin-status-select" onchange="updateInquiryStatus()" class="px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-accent-blue"> <option value="Pending" class="bg-bg-dark">Pending</option> <option value="Active" class="bg-bg-dark">Active</option> <option value="Completed" class="bg-bg-dark">Completed</option> </select>
-          </div><!-- Tab Buttons -->
-          <div class="flex border-b border-white/10"><button onclick="switchAdminInquiryTab('chat')" class="admin-inquiry-tab px-4 py-2 font-medium border-b-2 transition-colors" data-tab="chat"> Chat </button> <button onclick="switchAdminInquiryTab('progress')" class="admin-inquiry-tab px-4 py-2 font-medium border-b-2 transition-colors" data-tab="progress"> Progress Updates </button>
-          </div><!-- Chat Messages Tab -->
-          <div id="admin-chat-messages-tab" class="flex-1 flex flex-col">
-           <div id="admin-chat-messages" class="flex-1 overflow-y-auto p-4 space-y-4"><!-- Messages will be loaded here -->
-           </div>
-           <div class="p-4 border-t border-white/10">
-            <form onsubmit="sendAdminMessage(event)" class="flex gap-2 md:gap-3"><input type="text" id="admin-message-input" placeholder="Type your reply..." class="flex-1 px-3 md:px-4 py-2 md:py-3 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus"> <button type="submit" id="admin-send-btn" class="px-4 md:px-6 py-2 md:py-3 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-medium hover:opacity-90 transition-all text-sm"> Send </button>
-            </form>
-           </div>
-          </div><!-- Progress Updates Tab -->
-          <div id="admin-progress-tab" class="hidden flex-1 flex flex-col overflow-hidden">
-           <div class="flex-1 overflow-y-auto p-4">
-            <div class="glass rounded-2xl p-4 md:p-6 mb-4">
-             <h4 class="font-bold mb-4">Add Progress Update</h4>
-             <form onsubmit="addProgressUpdate(event)" class="space-y-3">
-              <div><label class="block text-sm text-white/70 mb-2">Update Title</label> <input type="text" id="progress-title-input" required class="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus" placeholder="e.g., HTML file completed">
-              </div>
-              <div><label class="block text-sm text-white/70 mb-2">Description</label> <textarea id="progress-desc-input" rows="3" required class="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-xl text-sm text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus resize-none" placeholder="Describe what you completed..."></textarea>
-              </div><button type="submit" id="add-progress-btn" class="w-full py-2 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-medium hover:opacity-90 transition-all text-sm"> Add Update </button>
-             </form>
-            </div>
-            <div id="admin-progress-list" class="space-y-3"><!-- Progress updates will be loaded here -->
-            </div>
-           </div>
-          </div>
-         </div>
-        </div>
-       </div><!-- Projects Panel -->
-       <div id="admin-projects-panel" class="h-full hidden p-6 overflow-y-auto">
-        <div class="max-w-2xl mx-auto">
-         <div class="glass rounded-2xl p-6 mb-6">
-          <h3 class="text-lg font-bold mb-4">Add New Project</h3>
-          <form onsubmit="addProject(event)" class="space-y-4">
-           <div><label class="block text-sm text-white/70 mb-2">Project Title</label> <input type="text" id="project-title-input" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus">
-           </div>
-           <div><label class="block text-sm text-white/70 mb-2">Description</label> <textarea id="project-desc-input" rows="3" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus resize-none"></textarea>
-           </div>
-           <div><label class="block text-sm text-white/70 mb-2">Category</label> <input type="text" id="project-category-input" placeholder="e.g., Web App, Mobile, SaaS" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus">
-           </div><button type="submit" id="add-project-btn" class="w-full py-3 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-medium hover:opacity-90 transition-all"> Add Project </button>
-          </form>
-         </div>
-         <h3 class="text-lg font-bold mb-4">Existing Projects</h3>
-         <div id="admin-projects-list" class="space-y-3"><!-- Projects will be loaded here -->
-         </div>
-        </div>
-       </div><!-- Testimonials Panel -->
-       <div id="admin-testimonials-panel" class="h-full hidden p-6 overflow-y-auto">
-        <div class="max-w-2xl mx-auto">
-         <div class="glass rounded-2xl p-6 mb-6">
-          <h3 class="text-lg font-bold mb-4">Add New Testimonial</h3>
-          <form onsubmit="addTestimonial(event)" class="space-y-4">
-           <div><label class="block text-sm text-white/70 mb-2">Client Name</label> <input type="text" id="testimonial-name-input" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus">
-           </div>
-           <div><label class="block text-sm text-white/70 mb-2">Role/Company</label> <input type="text" id="testimonial-role-input" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus">
-           </div>
-           <div><label class="block text-sm text-white/70 mb-2">Testimonial Text</label> <textarea id="testimonial-text-input" rows="3" required class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/40 focus:outline-none focus:border-accent-blue input-focus resize-none"></textarea>
-           </div><button type="submit" id="add-testimonial-btn" class="w-full py-3 bg-gradient-to-r from-accent-blue to-accent-purple rounded-xl font-medium hover:opacity-90 transition-all"> Add Testimonial </button>
-          </form>
-         </div>
-         <h3 class="text-lg font-bold mb-4">Existing Testimonials</h3>
-         <div id="admin-testimonials-list" class="space-y-3"><!-- Testimonials will be loaded here -->
-         </div>
-        </div>
-       </div>
-      </div>
-     </div>
-    </div>
-   </div><!-- Toast Notification -->
-   <div id="toast" class="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 hidden">
-    <div class="glass-strong rounded-xl px-6 py-3 flex items-center gap-3">
-     <svg id="toast-icon" class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-     </svg><span id="toast-message" class="text-sm">Success!</span>
-    </div>
-   </div>
-  </div>
-  <script>
-    // =============================================
-    // STATE MANAGEMENT
-    // =============================================
-    let allData = [];
-    let currentInquiryId = null;
-    let adminSelectedInquiry = null;
-    let secretClickCount = 0;
-    let secretTimeout = null;
-    let chatPollInterval = null;
-    
-    const defaultConfig = {
-      hero_name: 'ATHAN MEIR E. OBRERO',
-      hero_tagline: '<Full Stack Developer />',
-      bronze_title: 'Bronze',
-      silver_title: 'Silver',
-      gold_title: 'Gold',
-      background_color: '#030303',
-      accent_color: '#3b82f6',
-      text_color: '#ffffff',
-      surface_color: 'rgba(255, 255, 255, 0.03)',
-      secondary_color: '#9333ea'
-    };
-
-    // =============================================
-    // SDK INITIALIZATION
-    // =============================================
-    const dataHandler = {
-      onDataChanged(data) {
-        allData = data;
-        renderDynamicContent();
-        if (document.getElementById('admin-dashboard').classList.contains('hidden') === false) {
-          renderAdminInquiries();
-          renderAdminProjects();
-          renderAdminTestimonials();
-          if (adminSelectedInquiry) {
-            renderAdminProgressUpdates();
-          }
-        }
-        if (currentInquiryId) {
-          renderClientChat();
-          renderClientProgress();
-        }
-        if (adminSelectedInquiry) {
-          renderAdminChat();
-        }
-      }
-    };
-
-    async function initializeApp() {
-      // Initialize Element SDK
-      if (window.elementSdk) {
-        window.elementSdk.init({
-          defaultConfig,
-          onConfigChange: async (config) => {
-            const heroName = document.getElementById('hero-name');
-            if (heroName) heroName.textContent = config.hero_name || defaultConfig.hero_name;
-            
-            const bronzeTitle = document.getElementById('bronze-title');
-            if (bronzeTitle) bronzeTitle.textContent = config.bronze_title || defaultConfig.bronze_title;
-            
-            const silverTitle = document.getElementById('silver-title');
-            if (silverTitle) silverTitle.textContent = config.silver_title || defaultConfig.silver_title;
-            
-            const goldTitle = document.getElementById('gold-title');
-            if (goldTitle) goldTitle.textContent = config.gold_title || defaultConfig.gold_title;
-            
-            document.body.style.backgroundColor = config.background_color || defaultConfig.background_color;
-          },
-          mapToCapabilities: (config) => ({
-            recolorables: [
-              {
-                get: () => config.background_color || defaultConfig.background_color,
-                set: (value) => { config.background_color = value; window.elementSdk.setConfig({ background_color: value }); }
-              },
-              {
-                get: () => config.accent_color || defaultConfig.accent_color,
-                set: (value) => { config.accent_color = value; window.elementSdk.setConfig({ accent_color: value }); }
-              },
-              {
-                get: () => config.text_color || defaultConfig.text_color,
-                set: (value) => { config.text_color = value; window.elementSdk.setConfig({ text_color: value }); }
-              },
-              {
-                get: () => config.surface_color || defaultConfig.surface_color,
-                set: (value) => { config.surface_color = value; window.elementSdk.setConfig({ surface_color: value }); }
-              },
-              {
-                get: () => config.secondary_color || defaultConfig.secondary_color,
-                set: (value) => { config.secondary_color = value; window.elementSdk.setConfig({ secondary_color: value }); }
-              }
-            ],
-            borderables: [],
-            fontEditable: undefined,
-            fontSizeable: undefined
-          }),
-          mapToEditPanelValues: (config) => new Map([
-            ['hero_name', config.hero_name || defaultConfig.hero_name],
-            ['hero_tagline', config.hero_tagline || defaultConfig.hero_tagline],
-            ['bronze_title', config.bronze_title || defaultConfig.bronze_title],
-            ['silver_title', config.silver_title || defaultConfig.silver_title],
-            ['gold_title', config.gold_title || defaultConfig.gold_title]
-          ])
-        });
-      }
-
-      // Initialize Data SDK
-      if (window.dataSdk) {
-        const result = await window.dataSdk.init(dataHandler);
-        if (!result.isOk) {
-          console.error('Failed to initialize Data SDK');
-        }
-      }
-
-      // Start loading sequence
-      startLoadingSequence();
-    }
-
-    // =============================================
-    // LOADING SEQUENCE
-    // =============================================
-    function startLoadingSequence() {
-      const loadingText = document.getElementById('loading-text');
-      const loadingBar = document.getElementById('loading-bar');
-      const loadingPercent = document.getElementById('loading-percent');
-      const loadingScreen = document.getElementById('loading-screen');
-      const mainContent = document.getElementById('main-content');
-      
-      const text = 'ATStudios';
-      let charIndex = 0;
-      let progress = 0;
-      
-      // Typewriter effect for loading text
-      const typeInterval = setInterval(() => {
-        if (charIndex < text.length) {
-          loadingText.textContent += text[charIndex];
-          charIndex++;
-        } else {
-          clearInterval(typeInterval);
-        }
-      }, 100);
-      
-      // Progress bar animation
-      const progressInterval = setInterval(() => {
-        progress += Math.random() * 15;
-        if (progress >= 100) {
-          progress = 100;
-          clearInterval(progressInterval);
-          
-          // Fade out loading screen
-          setTimeout(() => {
-            loadingScreen.style.opacity = '0';
-            loadingScreen.style.transition = 'opacity 0.5s ease';
-            
-            setTimeout(() => {
-              loadingScreen.style.display = 'none';
-              mainContent.style.opacity = '1';
-              
-              // Start hero typewriter
-              startHeroTypewriter();
-            }, 500);
-          }, 300);
-        }
         
-        loadingBar.style.width = progress + '%';
-        loadingPercent.textContent = Math.floor(progress) + '%';
-      }, 150);
-    }
+        <div class="hidden md:flex items-center gap-8 animate-fade-in delay-200">
+          <a href="#home" class="text-sm font-semibold hover:text-orange-500 transition">Home</a>
+          <a href="#services" class="text-sm font-semibold hover:text-orange-500 transition">Services</a>
+          <a href="#portfolio" class="text-sm font-semibold hover:text-orange-500 transition">Portfolio</a>
+          <a href="#process" class="text-sm font-semibold hover:text-orange-500 transition">Process</a>
+          <a href="#testimonials" class="text-sm font-semibold hover:text-orange-500 transition">Testimonials</a>
+          <a href="#faq" class="text-sm font-semibold hover:text-orange-500 transition">FAQ</a>
+          <a href="#contact" class="text-sm font-semibold hover:text-orange-500 transition">Contact</a>
+        </div>
 
-    // =============================================
-    // HERO TYPEWRITER
-    // =============================================
-    function startHeroTypewriter() {
-      const typewriterText = document.getElementById('typewriter-text');
-      const config = window.elementSdk?.config || defaultConfig;
-      const text = config.hero_tagline || defaultConfig.hero_tagline;
-      let charIndex = 0;
-      
-      const typeInterval = setInterval(() => {
-        if (charIndex < text.length) {
-          typewriterText.textContent += text[charIndex];
-          charIndex++;
-        } else {
-          clearInterval(typeInterval);
-        }
-      }, 80);
-    }
+        <div class="flex items-center gap-4 animate-slide-in-right delay-300">
+          <button onclick="openTrackerModal()" class="btn btn-secondary text-xs py-2 px-4">Track Project</button>
+          <button onclick="openInquiryModal()" class="btn btn-primary text-xs py-2 px-4">Get Started</button>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-    // =============================================
-    // NAVIGATION
-    // =============================================
-    function toggleMobileMenu() {
-      const menu = document.getElementById('mobile-menu');
-      menu.classList.toggle('hidden');
-    }
+  <!-- Hero -->
+  <section id="home" class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 mesh-gradient">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 items-center">
+        <div>
+          <div class="inline-block mb-6 animate-scale-in">
+            <span class="bg-gradient-to-r from-orange-500/20 to-yellow-500/20 border border-orange-500/30 text-orange-400 px-6 py-2 rounded-full text-sm font-bold">
+              🚀 Crafting Digital Masterpieces
+            </span>
+          </div>
+          
+          <h1 class="text-6xl lg:text-7xl font-black mb-6 leading-tight animate-slide-in-up delay-100">
+            Transform Your
+            <span class="gradient-text block">Digital Vision</span>
+            Into Reality
+          </h1>
+          
+          <p class="text-xl text-gray-400 mb-8 leading-relaxed animate-slide-in-up delay-200">
+            Award-winning creative studio specializing in cutting-edge web development, stunning UI/UX design, and powerful brand identities.
+          </p>
+          
+          <div class="flex flex-wrap gap-4 animate-slide-in-up delay-300">
+            <button onclick="openInquiryModal()" class="btn btn-primary">Start Your Project</button>
+            <a href="#portfolio" class="btn btn-secondary">View Our Work</a>
+          </div>
 
-    function scrollToServices() {
-      document.getElementById('services').scrollIntoView({ behavior: 'smooth' });
-    }
+          <div class="mt-12 flex items-center gap-8 animate-fade-in delay-500">
+            <div>
+              <div class="text-4xl font-black gradient-text">250+</div>
+              <div class="text-sm text-gray-400 font-semibold">Projects</div>
+            </div>
+            <div class="h-12 w-px bg-gradient-to-b from-orange-500 to-transparent"></div>
+            <div>
+              <div class="text-4xl font-black gradient-text">98%</div>
+              <div class="text-sm text-gray-400 font-semibold">Satisfaction</div>
+            </div>
+            <div class="h-12 w-px bg-gradient-to-b from-orange-500 to-transparent"></div>
+            <div>
+              <div class="text-4xl font-black gradient-text">15+</div>
+              <div class="text-sm text-gray-400 font-semibold">Years</div>
+            </div>
+          </div>
+        </div>
 
-    // =============================================
-    // INQUIRY MODAL
-    // =============================================
-    function openInquiryModal(plan = 'Silver') {
-      const modal = document.getElementById('inquiry-modal');
-      const planSelect = document.getElementById('selected-plan');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-      planSelect.value = plan;
-    }
+        <div class="relative animate-float">
+          <div class="glass-strong rounded-3xl p-8 glow-primary">
+            <div class="aspect-square bg-gradient-to-br from-orange-500/20 to-yellow-500/20 rounded-2xl flex items-center justify-center relative overflow-hidden">
+              <div class="absolute inset-0 grid-background"></div>
+              <div class="relative z-10 text-center">
+                <div class="text-8xl mb-4">🎨</div>
+                <h3 class="text-3xl font-bold gradient-text">Creative Excellence</h3>
+                <p class="text-gray-400 mt-2">Where Innovation Meets Design</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    function closeInquiryModal() {
-      const modal = document.getElementById('inquiry-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      document.getElementById('inquiry-form').reset();
+  <!-- Stats -->
+  <section class="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 relative">
+    <div class="absolute inset-0 grid-background"></div>
+    <div class="max-w-7xl mx-auto relative z-10">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center animate-scale-in">
+          <div class="stat-number gradient-text">250+</div>
+          <div class="text-gray-400 font-semibold mt-2">Happy Clients</div>
+        </div>
+        <div class="text-center animate-scale-in delay-100">
+          <div class="stat-number gradient-text">500+</div>
+          <div class="text-gray-400 font-semibold mt-2">Projects Done</div>
+        </div>
+        <div class="text-center animate-scale-in delay-200">
+          <div class="stat-number gradient-text">50+</div>
+          <div class="text-gray-400 font-semibold mt-2">Awards Won</div>
+        </div>
+        <div class="text-center animate-scale-in delay-300">
+          <div class="stat-number gradient-text">24/7</div>
+          <div class="text-gray-400 font-semibold mt-2">Support</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="py-32 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-orange-500 font-bold text-sm uppercase tracking-wider">What We Do</span>
+        <h2 class="text-5xl lg:text-6xl font-black mt-4 mb-6">Our <span class="gradient-text">Services</span></h2>
+        <p class="text-xl text-gray-400 max-w-3xl mx-auto">Comprehensive digital solutions tailored to elevate your brand</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card animate-slide-in-up">
+          <div class="text-5xl mb-6">🌐</div>
+          <h3 class="text-2xl font-bold mb-4">Web Development</h3>
+          <p class="text-gray-400 mb-6">Custom websites built with cutting-edge technologies. Responsive, fast, and optimized.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> React & Vue.js Apps</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> E-commerce Solutions</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Progressive Web Apps</li>
+          </ul>
+          <button onclick="openInquiryModal('Web Development')" class="btn btn-secondary w-full text-sm py-3">Learn More</button>
+        </div>
+
+        <div class="card card-feature animate-slide-in-up delay-100">
+          <div class="absolute top-4 right-4 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-bold">POPULAR</div>
+          <div class="text-5xl mb-6">🎨</div>
+          <h3 class="text-2xl font-bold mb-4">UI/UX Design</h3>
+          <p class="text-gray-400 mb-6">Beautiful, intuitive interfaces that delight users and drive engagement.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> User Research</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Prototyping</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Design Systems</li>
+          </ul>
+          <button onclick="openInquiryModal('UI/UX Design')" class="btn btn-primary w-full text-sm py-3">Learn More</button>
+        </div>
+
+        <div class="card animate-slide-in-up delay-200">
+          <div class="text-5xl mb-6">🚀</div>
+          <h3 class="text-2xl font-bold mb-4">Brand Identity</h3>
+          <p class="text-gray-400 mb-6">Distinctive brand identities that tell your story and connect with your audience.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Logo Design</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Brand Strategy</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Guidelines</li>
+          </ul>
+          <button onclick="openInquiryModal('Brand Identity')" class="btn btn-secondary w-full text-sm py-3">Learn More</button>
+        </div>
+
+        <div class="card animate-slide-in-up delay-300">
+          <div class="text-5xl mb-6">📱</div>
+          <h3 class="text-2xl font-bold mb-4">Mobile Apps</h3>
+          <p class="text-gray-400 mb-6">Native and cross-platform mobile applications for iOS and Android.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> iOS Development</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Android Development</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> React Native</li>
+          </ul>
+          <button onclick="openInquiryModal('Mobile Apps')" class="btn btn-secondary w-full text-sm py-3">Learn More</button>
+        </div>
+
+        <div class="card animate-slide-in-up delay-400">
+          <div class="text-5xl mb-6">💻</div>
+          <h3 class="text-2xl font-bold mb-4">Digital Marketing</h3>
+          <p class="text-gray-400 mb-6">Data-driven marketing strategies to grow your online presence effectively.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> SEO Optimization</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Social Media</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Analytics</li>
+          </ul>
+          <button onclick="openInquiryModal('Digital Marketing')" class="btn btn-secondary w-full text-sm py-3">Learn More</button>
+        </div>
+
+        <div class="card animate-slide-in-up delay-500">
+          <div class="text-5xl mb-6">🔧</div>
+          <h3 class="text-2xl font-bold mb-4">Support & Maintenance</h3>
+          <p class="text-gray-400 mb-6">Ongoing support to keep your digital products running smoothly.</p>
+          <ul class="space-y-2 mb-6">
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Regular Updates</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> Security Monitoring</li>
+            <li class="flex items-center gap-2 text-sm"><span class="text-orange-500">✓</span> 24/7 Support</li>
+          </ul>
+          <button onclick="openInquiryModal('Maintenance')" class="btn btn-secondary w-full text-sm py-3">Learn More</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Portfolio -->
+  <section id="portfolio" class="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-transparent to-orange-500/5">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-orange-500 font-bold text-sm uppercase tracking-wider">Our Work</span>
+        <h2 class="text-5xl lg:text-6xl font-black mt-4 mb-6">Featured <span class="gradient-text">Projects</span></h2>
+      </div>
+
+      <div id="dynamicPortfolio" class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
+        <div class="card group cursor-pointer h-96 relative animate-scale-in">
+          <div class="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-yellow-500/20 group-hover:from-orange-500/30 group-hover:to-yellow-500/30 transition-all"></div>
+          <div class="relative z-10 h-full flex flex-col justify-between">
+            <div>
+              <span class="text-orange-400 text-sm font-bold font-mono">E-COMMERCE</span>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span class="skill-badge">React</span>
+                <span class="skill-badge">Node.js</span>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-3xl font-bold mb-3">LuxeStyle Boutique</h3>
+              <p class="text-gray-400 mb-4">Premium fashion e-commerce platform</p>
+              <div class="flex items-center gap-4 text-sm">
+                <span class="text-orange-400 font-bold">+250% Sales</span>
+                <span class="text-gray-500">•</span>
+                <span class="text-orange-400 font-bold">50K Users</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card group cursor-pointer h-96 relative animate-scale-in delay-100">
+          <div class="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-purple-500/20 group-hover:from-blue-500/30 group-hover:to-purple-500/30 transition-all"></div>
+          <div class="relative z-10 h-full flex flex-col justify-between">
+            <div>
+              <span class="text-blue-400 text-sm font-bold font-mono">FINTECH</span>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span class="skill-badge">Vue.js</span>
+                <span class="skill-badge">Python</span>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-3xl font-bold mb-3">WealthTrack Pro</h3>
+              <p class="text-gray-400 mb-4">AI-powered investment tracking</p>
+              <div class="flex items-center gap-4 text-sm">
+                <span class="text-blue-400 font-bold">$10M+ Managed</span>
+                <span class="text-gray-500">•</span>
+                <span class="text-blue-400 font-bold">5K Investors</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card group cursor-pointer h-96 relative animate-scale-in delay-200">
+          <div class="absolute inset-0 bg-gradient-to-br from-green-500/20 to-emerald-500/20 group-hover:from-green-500/30 group-hover:to-emerald-500/30 transition-all"></div>
+          <div class="relative z-10 h-full flex flex-col justify-between">
+            <div>
+              <span class="text-green-400 text-sm font-bold font-mono">HEALTHCARE</span>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <span class="skill-badge">React Native</span>
+                <span class="skill-badge">Firebase</span>
+              </div>
+            </div>
+            <div>
+              <h3 class="text-3xl font-bold mb-3">MediConnect</h3>
+              <p class="text-gray-400 mb-4">Telemedicine platform</p>
+              <div class="flex items-center gap-4 text-sm">
+                <span class="text-green-400 font-bold">100K Calls</span>
+                <span class="text-gray-500">•</span>
+                <span class="text-green-400 font-bold">4.9★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process" class="py-32 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-orange-500 font-bold text-sm uppercase tracking-wider">How We Work</span>
+        <h2 class="text-5xl lg:text-6xl font-black mt-4 mb-6">Our <span class="gradient-text">Process</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="text-center animate-scale-in">
+          <div class="process-number">1</div>
+          <h3 class="text-2xl font-bold mb-4">Discovery</h3>
+          <p class="text-gray-400">Deep dive into your business, goals, and audience through research.</p>
+        </div>
+
+        <div class="text-center animate-scale-in delay-100">
+          <div class="process-number">2</div>
+          <h3 class="text-2xl font-bold mb-4">Design</h3>
+          <p class="text-gray-400">Create stunning interfaces with wireframes, mockups, and prototypes.</p>
+        </div>
+
+        <div class="text-center animate-scale-in delay-200">
+          <div class="process-number">3</div>
+          <h3 class="text-2xl font-bold mb-4">Development</h3>
+          <p class="text-gray-400">Build with cutting-edge tech ensuring performance and scalability.</p>
+        </div>
+
+        <div class="text-center animate-scale-in delay-300">
+          <div class="process-number">4</div>
+          <h3 class="text-2xl font-bold mb-4">Launch</h3>
+          <p class="text-gray-400">Smooth launch with ongoing support and optimization.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-orange-500/5 to-transparent">
+    <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-orange-500 font-bold text-sm uppercase tracking-wider">Client Love</span>
+        <h2 class="text-5xl lg:text-6xl font-black mt-4 mb-6">What Clients <span class="gradient-text">Say</span></h2>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card testimonial-card animate-slide-in-up">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center text-2xl font-bold">SJ</div>
+            <div>
+              <h4 class="font-bold text-lg">Sarah Johnson</h4>
+              <p class="text-gray-400 text-sm">CEO, TechVentures</p>
+            </div>
+          </div>
+          <div class="flex gap-1 mb-4">
+            <span class="text-yellow-400">★★★★★</span>
+          </div>
+          <p class="text-gray-300 italic">"ATStudios transformed our platform. Conversion increased 180%!"</p>
+        </div>
+
+        <div class="card testimonial-card animate-slide-in-up delay-100">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center text-2xl font-bold">MC</div>
+            <div>
+              <h4 class="font-bold text-lg">Michael Chen</h4>
+              <p class="text-gray-400 text-sm">Founder, HealthFirst</p>
+            </div>
+          </div>
+          <div class="flex gap-1 mb-4">
+            <span class="text-yellow-400">★★★★★</span>
+          </div>
+          <p class="text-gray-300 italic">"Working with ATStudios was a game-changer. Professional and creative!"</p>
+        </div>
+
+        <div class="card testimonial-card animate-slide-in-up delay-200">
+          <div class="flex items-center gap-4 mb-6">
+            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-2xl font-bold">ER</div>
+            <div>
+              <h4 class="font-bold text-lg">Emma Rodriguez</h4>
+              <p class="text-gray-400 text-sm">Marketing Director</p>
+            </div>
+          </div>
+          <div class="flex gap-1 mb-4">
+            <span class="text-yellow-400">★★★★★</span>
+          </div>
+          <p class="text-gray-300 italic">"The attention to detail was incredible. They captured our essence perfectly!"</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="py-32 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <div class="text-center mb-16">
+        <span class="text-orange-500 font-bold text-sm uppercase tracking-wider">Questions?</span>
+        <h2 class="text-5xl lg:text-6xl font-black mt-4 mb-6">Frequently Asked <span class="gradient-text">Questions</span></h2>
+      </div>
+
+      <div class="space-y-4">
+        <div class="faq-item glass rounded-2xl overflow-hidden">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="text-lg font-bold">How long does a typical project take?</span>
+            <span class="faq-icon text-2xl text-orange-500">+</span>
+          </div>
+          <div class="faq-answer">
+            <p class="text-gray-400">Basic websites take 4-6 weeks, while complex apps can take 3-6 months. We provide detailed timelines during discovery.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass rounded-2xl overflow-hidden">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="text-lg font-bold">What is your pricing structure?</span>
+            <span class="faq-icon text-2xl text-orange-500">+</span>
+          </div>
+          <div class="faq-answer">
+            <p class="text-gray-400">We offer fixed-price, hourly, and monthly retainers. Pricing depends on scope and timeline.</p>
+          </div>
+        </div>
+
+        <div class="faq-item glass rounded-2xl overflow-hidden">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="text-lg font-bold">Do you provide ongoing support?</span>
+            <span class="faq-icon text-2xl text-orange-500">+</span>
+          </div>
+          <div class="faq-answer">
+            <p class="text-gray-400">Yes! We offer comprehensive maintenance packages including updates, security, and 24/7 support.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="contact" class="py-32 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 grid-background opacity-30"></div>
+    <div class="max-w-4xl mx-auto relative z-10">
+      <div class="glass-strong rounded-3xl p-16 text-center glow-primary">
+        <h2 class="text-5xl lg:text-6xl font-black mb-6">Ready to Build <span class="gradient-text">Something Amazing?</span></h2>
+        <p class="text-xl text-gray-400 mb-10 max-w-2xl mx-auto">Let's turn your vision into reality with a free consultation.</p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <button onclick="openInquiryModal()" class="btn btn-primary text-base py-4 px-10">Start Your Project</button>
+          <button onclick="openTrackerModal()" class="btn btn-secondary text-base py-4 px-10">Track Project</button>
+        </div>
+        
+        <div class="mt-12 pt-12 border-t border-orange-500/20">
+          <p class="text-gray-400 mb-4">Or reach out directly:</p>
+          <div class="flex flex-wrap gap-6 justify-center text-sm">
+            <a href="mailto:hello@atstudios.com" class="flex items-center gap-2 hover:text-orange-400 transition">
+              <span class="text-xl">📧</span> hello@atstudios.com
+            </a>
+            <a href="tel:+1234567890" class="flex items-center gap-2 hover:text-orange-400 transition">
+              <span class="text-xl">📞</span> +1 (234) 567-890
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-16 px-4 sm:px-6 lg:px-8 border-t border-orange-500/10">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid md:grid-cols-4 gap-12 mb-12">
+        <div>
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center font-bold text-2xl">AT</div>
+            <h3 class="text-xl font-bold gradient-text">ATStudios</h3>
+          </div>
+          <p class="text-gray-400 text-sm">Transforming digital visions since 2010.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold mb-4">Services</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#services" class="hover:text-orange-400 transition">Web Development</a></li>
+            <li><a href="#services" class="hover:text-orange-400 transition">UI/UX Design</a></li>
+            <li><a href="#services" class="hover:text-orange-400 transition">Mobile Apps</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold mb-4">Company</h4>
+          <ul class="space-y-2 text-sm text-gray-400">
+            <li><a href="#portfolio" class="hover:text-orange-400 transition">Portfolio</a></li>
+            <li><a href="#testimonials" class="hover:text-orange-400 transition">Testimonials</a></li>
+            <li><a href="#contact" class="hover:text-orange-400 transition">Contact</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="font-bold mb-4">Connect</h4>
+          <div class="flex gap-4">
+            <a href="#" class="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center hover:bg-orange-500 transition text-lg">🔗</a>
+            <a href="#" class="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center hover:bg-orange-500 transition text-lg">📘</a>
+            <a href="#" class="w-10 h-10 bg-orange-500/20 rounded-lg flex items-center justify-center hover:bg-orange-500 transition text-lg">🐦</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-8 border-t border-orange-500/10 flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+        <p><span onclick="openAdminPanel()" class="cursor-pointer hover:text-orange-400" title="Admin Access">©</span> 2026 ATStudios. All rights reserved.</p>
+        <div class="flex gap-6">
+          <a href="#" class="hover:text-orange-400 transition">Privacy</a>
+          <a href="#" class="hover:text-orange-400 transition">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modals -->
+  <div id="inquiryModal" class="modal">
+    <div class="modal-backdrop" onclick="closeInquiryModal()"></div>
+    <div class="modal-content glass-strong rounded-3xl p-8">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold gradient-text">Start Your Project</h2>
+        <button onclick="closeInquiryModal()" class="text-3xl hover:text-orange-500">&times;</button>
+      </div>
+      <form id="inquiryForm" onsubmit="submitInquiry(event)" class="space-y-6">
+        <input type="text" id="clientName" placeholder="Your Name" required class="w-full bg-gray-900/50 border border-orange-500/20 rounded-xl px-4 py-3 focus:border-orange-500 focus:outline-none">
+        <input type="email" id="clientEmail" placeholder="Your Email" required class="w-full bg-gray-900/50 border border-orange-500/20 rounded-xl px-4 py-3 focus:border-orange-500 focus:outline-none">
+        <select id="projectPlan" required class="w-full bg-gray-900/50 border border-orange-500/20 rounded-xl px-4 py-3 focus:border-orange-500 focus:outline-none">
+          <option>Web Development</option>
+          <option>UI/UX Design</option>
+          <option>Mobile Apps</option>
+          <option>Brand Identity</option>
+          <option>Digital Marketing</option>
+          <option>Maintenance</option>
+        </select>
+        <textarea id="projectDetails" placeholder="Project Details" required rows="4" class="w-full bg-gray-900/50 border border-orange-500/20 rounded-xl px-4 py-3 focus:border-orange-500 focus:outline-none resize-none"></textarea>
+        <button type="submit" class="btn btn-primary w-full">Submit Inquiry</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="trackerModal" class="modal">
+    <div class="modal-backdrop" onclick="closeTrackerModal()"></div>
+    <div class="modal-content glass-strong rounded-3xl p-8">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold gradient-text">Track Project</h2>
+        <button onclick="closeTrackerModal()" class="text-3xl hover:text-orange-500">&times;</button>
+      </div>
+      <form id="trackerForm" onsubmit="trackProject(event)">
+        <input type="text" id="trackerId" placeholder="PRJ-XXXXXXXX" required class="w-full bg-gray-900/50 border border-orange-500/20 rounded-xl px-4 py-3 font-mono mb-4 focus:border-orange-500 focus:outline-none">
+        <div id="trackerError" class="hidden bg-red-500/20 border border-red-500/50 rounded-xl p-4 text-red-400 text-sm mb-4">Project not found</div>
+        <button type="submit" class="btn btn-primary w-full">Track Project</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="receiptModal" class="modal">
+    <div class="modal-backdrop" onclick="closeReceiptModal()"></div>
+    <div class="modal-content glass-strong rounded-3xl p-8">
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-bold gradient-text">Receipt</h2>
+        <button onclick="closeReceiptModal()" class="text-3xl hover:text-orange-500">&times;</button>
+      </div>
+      <div id="receiptContent" class="bg-white text-gray-900 rounded-2xl p-8 mb-6">
+        <div class="text-center mb-6">
+          <div class="inline-block w-16 h-16 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-xl flex items-center justify-center font-bold text-3xl text-white mb-4">AT</div>
+          <h3 class="text-2xl font-bold">ATStudios</h3>
+          <p class="text-sm text-gray-600">Project Confirmation</p>
+        </div>
+        <div class="space-y-2 border-t border-b border-gray-200 py-4">
+          <div class="flex justify-between"><span>Date:</span><span id="receiptDate"></span></div>
+          <div class="flex justify-between"><span>ID:</span><span id="receiptId" class="font-mono text-orange-600"></span></div>
+          <div class="flex justify-between"><span>Name:</span><span id="receiptName"></span></div>
+          <div class="flex justify-between"><span>Email:</span><span id="receiptEmail"></span></div>
+          <div class="flex justify-between"><span>Service:</span><span id="receiptPlan"></span></div>
+        </div>
+        <div class="mt-6 text-center text-sm text-gray-600">
+          <p>Thank you for choosing ATStudios!</p>
+          <p class="mt-2 font-bold text-orange-600">Save your Project ID to track progress</p>
+        </div>
+      </div>
+      <div class="flex gap-4">
+        <button onclick="downloadReceipt()" class="btn btn-secondary w-full">Download</button>
+        <button onclick="closeReceiptModal()" class="btn btn-primary w-full">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="clientPortal" class="hidden fixed inset-0 bg-gray-900/95 backdrop-blur z-50 overflow-y-auto p-4">
+    <div class="max-w-4xl mx-auto py-8">
+      <div class="flex justify-between mb-8">
+        <div>
+          <h2 class="text-4xl font-bold gradient-text">Client Portal</h2>
+          <p class="text-gray-400">ID: <span id="portalId" class="font-mono text-orange-400"></span></p>
+        </div>
+        <button onclick="closeClientPortal()" class="text-4xl hover:text-orange-500">&times;</button>
+      </div>
+      <div class="card">
+        <h3 class="text-2xl font-bold mb-4">Status: <span id="portalStatus" class="gradient-text"></span></h3>
+        <div id="portalMessages" class="space-y-4"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Admin Panel -->
+  <div id="adminPanel" class="hidden fixed inset-0 bg-gray-900/95 backdrop-blur z-50 overflow-y-auto p-4">
+    <div class="max-w-7xl mx-auto py-8">
+      <div class="flex justify-between mb-8">
+        <h2 class="text-4xl font-bold gradient-text">Admin Dashboard</h2>
+        <button onclick="closeAdminPanel()" class="text-4xl hover:text-orange-500">&times;</button>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-8 mb-8">
+        <div class="card">
+          <div class="text-orange-500 text-3xl mb-2">📊</div>
+          <div class="text-3xl font-bold gradient-text" id="totalProjects">0</div>
+          <div class="text-gray-400 text-sm">Total Projects</div>
+        </div>
+        <div class="card">
+          <div class="text-yellow-500 text-3xl mb-2">⏳</div>
+          <div class="text-3xl font-bold gradient-text" id="pendingProjects">0</div>
+          <div class="text-gray-400 text-sm">Pending</div>
+        </div>
+        <div class="card">
+          <div class="text-green-500 text-3xl mb-2">✅</div>
+          <div class="text-3xl font-bold gradient-text" id="activeProjects">0</div>
+          <div class="text-gray-400 text-sm">Active</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-2xl font-bold">All Projects</h3>
+          <button onclick="refreshProjects()" class="btn btn-secondary text-xs py-2 px-4">Refresh</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Client</th>
+                <th>Email</th>
+                <th>Service</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="projectsTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card mt-8">
+        <h3 class="text-2xl font-bold mb-6">Add Portfolio Item</h3>
+        <form id="portfolioForm" onsubmit="addPortfolio(event)" class="grid md:grid-cols-2 gap-4">
+          <input type="text" id="portfolioTitle" placeholder="Project Title" required class="bg-gray-900/50 border border-orange-500/20 rounded-xl px-4 py-3">
+          <input type="text" id="portfolioCategory" placeholder="Category" required class="bg-gray-900/50 border border-orange-500/20 rounded-xl px-4 py-3">
+          <textarea id="portfolioDescription" placeholder="Description" required class="md:col-span-2 bg-gray-900/50 border border-orange-500/20 rounded-xl px-4 py-3" rows="3"></textarea>
+          <button type="submit" class="md:col-span-2 btn btn-primary">Add Portfolio Item</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden">
+    <div class="glass-strong rounded-2xl px-6 py-4 flex items-center gap-4 shadow-2xl">
+      <span id="toastIcon" class="text-2xl"></span>
+      <span id="toastMessage" class="font-semibold"></span>
+    </div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBRIBoxXZ8gFMmkaqyGbQNvWEZY3eH0GNc",
+      authDomain: "atstudios-ffcc6.firebaseapp.com",
+      databaseURL: "https://atstudios-ffcc6-default-rtdb.firebaseio.com",
+      projectId: "atstudios-ffcc6",
+      storageBucket: "atstudios-ffcc6.firebasestorage.app",
+      messagingSenderId: "129004328660",
+      appId: "1:129004328660:web:0a3596390106d055e94d41"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const auth = firebase.auth();
+    auth.signInAnonymously().catch(err => console.error('Auth:', err));
+
+    let currentProjectId = null;
+
+    window.addEventListener('scroll', () => {
+      const navbar = document.getElementById('navbar');
+      navbar.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    function openInquiryModal(service = 'Web Development') {
+      document.getElementById('projectPlan').value = service;
+      document.getElementById('inquiryModal').classList.add('active');
+    }
+    function closeInquiryModal() { document.getElementById('inquiryModal').classList.remove('active'); }
+    function openTrackerModal() {
+      document.getElementById('trackerModal').classList.add('active');
+      document.getElementById('trackerError').classList.add('hidden');
+    }
+    function closeTrackerModal() { document.getElementById('trackerModal').classList.remove('active'); }
+    function openReceiptModal() { document.getElementById('receiptModal').classList.add('active'); }
+    function closeReceiptModal() { document.getElementById('receiptModal').classList.remove('active'); }
+
+    function toggleFAQ(element) {
+      const faqItem = element.parentElement;
+      const isActive = faqItem.classList.contains('active');
+      document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+        item.querySelector('.faq-icon').textContent = '+';
+      });
+      if (!isActive) {
+        faqItem.classList.add('active');
+        element.querySelector('.faq-icon').textContent = '−';
+      }
     }
 
     async function submitInquiry(e) {
       e.preventDefault();
-      
-      const submitBtn = document.getElementById('inquiry-submit-btn');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="animate-spin">⏳</span> Submitting...';
-      
-      const name = document.getElementById('client-name').value;
-      const email = document.getElementById('client-email').value;
-      const plan = document.getElementById('selected-plan').value;
-      const details = document.getElementById('project-details').value;
-      
-      // Generate unique ID
-      const inquiryId = 'ATH-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-      
-      if (allData.filter(d => d.type === 'inquiry').length >= 999) {
-        showToast('Maximum inquiries reached', 'error');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = '<span>Submit Inquiry</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>';
-        return;
-      }
-      
-      const result = await window.dataSdk.create({
-        type: 'inquiry',
-        inquiry_id: inquiryId,
-        client_name: name,
-        client_email: email,
-        plan: plan,
-        project_details: details,
-        status: 'Pending',
-        created_at: new Date().toISOString()
-      });
-      
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = '<span>Submit Inquiry</span><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>';
-      
-      if (result.isOk) {
-        closeInquiryModal();
-        
-        // Show receipt
-        showReceipt(inquiryId, name, email, plan, details);
-      } else {
-        showToast('Failed to submit inquiry', 'error');
-      }
-    }
+      const name = document.getElementById('clientName').value;
+      const email = document.getElementById('clientEmail').value;
+      const plan = document.getElementById('projectPlan').value;
+      const details = document.getElementById('projectDetails').value;
+      const projectId = 'PRJ-' + Math.random().toString(36).substr(2, 8).toUpperCase();
 
-    function showReceipt(inquiryId, name, email, plan, details) {
-      const modal = document.getElementById('receipt-modal');
-      const date = new Date().toLocaleString();
-      
-      document.getElementById('receipt-date').textContent = date;
-      document.getElementById('receipt-id').textContent = inquiryId;
-      document.getElementById('receipt-name').textContent = name;
-      document.getElementById('receipt-email').textContent = email;
-      document.getElementById('receipt-plan').textContent = plan;
-      document.getElementById('receipt-details').textContent = details;
-      
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeReceiptModal() {
-      const modal = document.getElementById('receipt-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
-
-    async function downloadReceipt() {
-      const receiptContent = document.getElementById('receipt-content');
-      
       try {
-        const canvas = await html2canvas(receiptContent, {
-          backgroundColor: '#ffffff',
-          scale: 2
+        await db.ref('projects/' + projectId).set({
+          projectId, clientName: name, clientEmail: email, plan, details,
+          status: 'pending', createdAt: new Date().toISOString(),
+          messages: {
+            initial: {
+              sender: 'admin',
+              message: 'Thank you! We will contact you within 24 hours.',
+              timestamp: new Date().toISOString()
+            }
+          }
         });
-        
-        const link = document.createElement('a');
-        link.download = `ATStudios-Receipt-${document.getElementById('receipt-id').textContent}.png`;
-        link.href = canvas.toDataURL();
-        link.click();
-        
-        showToast('Receipt downloaded!');
+
+        document.getElementById('receiptDate').textContent = new Date().toLocaleDateString();
+        document.getElementById('receiptId').textContent = projectId;
+        document.getElementById('receiptName').textContent = name;
+        document.getElementById('receiptEmail').textContent = email;
+        document.getElementById('receiptPlan').textContent = plan;
+
+        closeInquiryModal();
+        openReceiptModal();
+        document.getElementById('inquiryForm').reset();
+        showToast('Project submitted successfully!', 'success');
       } catch (error) {
-        showToast('Failed to download receipt', 'error');
+        showToast('Error submitting inquiry', 'error');
       }
     }
 
-    // =============================================
-    // TRACKER MODAL
-    // =============================================
-    function openTrackerModal() {
-      const modal = document.getElementById('tracker-modal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
-    }
-
-    function closeTrackerModal() {
-      const modal = document.getElementById('tracker-modal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-      document.getElementById('tracker-id').value = '';
-      document.getElementById('tracker-error').classList.add('hidden');
-    }
-
-    function trackInquiry(e) {
+    async function trackProject(e) {
       e.preventDefault();
-      
-      const trackerId = document.getElementById('tracker-id').value.trim().toUpperCase();
-      const inquiry = allData.find(d => d.type === 'inquiry' && d.inquiry_id === trackerId);
-      
-      if (inquiry) {
-        closeTrackerModal();
-        currentInquiryId = trackerId;
-        openClientPortal(inquiry);
-      } else {
-        document.getElementById('tracker-error').classList.remove('hidden');
+      const projectId = document.getElementById('trackerId').value.toUpperCase();
+
+      try {
+        const snapshot = await db.ref('projects/' + projectId).get();
+        if (snapshot.exists()) {
+          closeTrackerModal();
+          currentProjectId = projectId;
+          openClientPortal(snapshot.val());
+          showToast('Project found!', 'success');
+        } else {
+          document.getElementById('trackerError').classList.remove('hidden');
+          showToast('Project not found', 'error');
+        }
+      } catch (error) {
+        showToast('Error tracking project', 'error');
       }
     }
 
-    // =============================================
-    // CLIENT PORTAL
-    // =============================================
-    function openClientPortal(inquiry) {
-      const portal = document.getElementById('client-portal');
-      document.getElementById('portal-inquiry-id').textContent = inquiry.inquiry_id;
-      
-      const statusEl = document.getElementById('portal-status');
-      statusEl.textContent = inquiry.status;
-      statusEl.className = 'font-medium status-' + inquiry.status.toLowerCase();
-      
-      portal.classList.remove('hidden');
-      switchClientTab('chat');
-      renderClientChat();
-      renderClientProgress();
-      
-      // Start polling for new messages
-      if (chatPollInterval) clearInterval(chatPollInterval);
-      chatPollInterval = setInterval(() => {
-        renderClientChat();
-        renderClientProgress();
-      }, 3000);
+    function openClientPortal(project) {
+      document.getElementById('portalId').textContent = project.projectId;
+      document.getElementById('portalStatus').textContent = project.status.toUpperCase();
+      document.getElementById('clientPortal').classList.remove('hidden');
+
+      if (project.messages) {
+        const messagesDiv = document.getElementById('portalMessages');
+        messagesDiv.innerHTML = Object.values(project.messages)
+          .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+          .map(msg => `
+            <div class="glass rounded-2xl p-4">
+              <div class="text-sm text-gray-400 mb-2">${new Date(msg.timestamp).toLocaleDateString()}</div>
+              <p>${msg.message}</p>
+            </div>
+          `).join('');
+      }
     }
 
     function closeClientPortal() {
-      document.getElementById('client-portal').classList.add('hidden');
-      currentInquiryId = null;
-      if (chatPollInterval) {
-        clearInterval(chatPollInterval);
-        chatPollInterval = null;
-      }
-    }
-
-    function switchClientTab(tab) {
-      // Update tabs
-      document.querySelectorAll('.client-tab').forEach(btn => {
-        btn.classList.remove('border-accent-blue', 'text-white');
-        btn.classList.add('border-transparent', 'text-white/60');
-        
-        if (btn.dataset.tab === tab) {
-          btn.classList.remove('border-transparent', 'text-white/60');
-          btn.classList.add('border-accent-blue', 'text-white');
-        }
-      });
-      
-      // Show/hide content
-      document.getElementById('client-chat-tab').classList.toggle('hidden', tab !== 'chat');
-      document.getElementById('client-progress-tab').classList.toggle('hidden', tab !== 'progress');
-      
-      if (tab === 'chat') renderClientChat();
-      if (tab === 'progress') renderClientProgress();
-    }
-
-    function renderClientChat() {
-      const container = document.getElementById('client-chat-messages').querySelector('.max-w-4xl');
-      const messages = allData.filter(d => d.type === 'chat' && d.chat_inquiry_id === currentInquiryId);
-      
-      messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      
-      if (messages.length === 0) {
-        container.innerHTML = `
-          <div class="text-center text-white/40 py-8">
-            <p>No messages yet. Start the conversation!</p>
-          </div>
-        `;
-        return;
-      }
-      
-      container.innerHTML = messages.map(msg => `
-        <div class="flex ${msg.sender === 'client' ? 'justify-end' : 'justify-start'}">
-          <div class="${msg.sender === 'client' ? 'chat-bubble-client' : 'chat-bubble-admin'} rounded-2xl px-4 py-3 max-w-md">
-            <p class="text-sm">${escapeHtml(msg.message)}</p>
-            <span class="text-xs text-white/40 mt-1 block">${formatTime(msg.timestamp)}</span>
-          </div>
-        </div>
-      `).join('');
-      
-      container.scrollTop = container.scrollHeight;
-    }
-
-    function renderClientProgress() {
-      const container = document.getElementById('progress-timeline');
-      const progressUpdates = allData.filter(d => d.type === 'progress' && d.progress_inquiry_id === currentInquiryId);
-      
-      progressUpdates.sort((a, b) => new Date(b.progress_date) - new Date(a.progress_date));
-      
-      if (progressUpdates.length === 0) {
-        container.innerHTML = `
-          <div class="text-center text-white/40 py-8">
-            <p>No progress updates yet. Check back soon!</p>
-          </div>
-        `;
-        return;
-      }
-      
-      container.innerHTML = progressUpdates.map((update, index) => `
-        <div class="progress-step flex gap-4">
-          <div class="w-10 h-10 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple flex items-center justify-center flex-shrink-0">
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
-          </div>
-          <div class="flex-1 pb-8">
-            <div class="glass rounded-xl p-4">
-              <div class="flex items-start justify-between mb-2">
-                <h4 class="font-semibold">${escapeHtml(update.progress_title)}</h4>
-                <span class="text-xs text-white/60">${formatDate(update.progress_date)}</span>
-              </div>
-              <p class="text-sm text-white/70">${escapeHtml(update.progress_description)}</p>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    async function sendClientMessage(e) {
-      e.preventDefault();
-      
-      const input = document.getElementById('client-message-input');
-      const message = input.value.trim();
-      if (!message) return;
-      
-      const sendBtn = document.getElementById('client-send-btn');
-      sendBtn.disabled = true;
-      sendBtn.textContent = 'Sending...';
-      
-      const result = await window.dataSdk.create({
-        type: 'chat',
-        chat_inquiry_id: currentInquiryId,
-        sender: 'client',
-        message: message,
-        timestamp: new Date().toISOString()
-      });
-      
-      sendBtn.disabled = false;
-      sendBtn.textContent = 'Send';
-      
-      if (result.isOk) {
-        input.value = '';
-      } else {
-        showToast('Failed to send message', 'error');
-      }
-    }
-
-    // =============================================
-    // SECRET ADMIN ACCESS
-    // =============================================
-    document.getElementById('secret-trigger').addEventListener('click', () => {
-      secretClickCount++;
-      
-      if (secretTimeout) clearTimeout(secretTimeout);
-      
-      if (secretClickCount >= 3) {
-        const secretInput = document.getElementById('secret-input-container');
-        secretInput.classList.remove('hidden');
-        document.getElementById('secret-input').focus();
-        secretClickCount = 0;
-      }
-      
-      secretTimeout = setTimeout(() => {
-        secretClickCount = 0;
-      }, 2000);
-    });
-
-    document.getElementById('secret-input').addEventListener('input', (e) => {
-      if (e.target.value === '143') {
-        document.getElementById('secret-input-container').classList.add('hidden');
-        e.target.value = '';
-        openAdminDashboard();
-      }
-    });
-
-    // =============================================
-    // ADMIN DASHBOARD
-    // =============================================
-    function openAdminDashboard() {
-      document.getElementById('admin-dashboard').classList.remove('hidden');
-      switchAdminTab('inquiries');
-      renderAdminInquiries();
-      renderAdminProjects();
-      renderAdminTestimonials();
-    }
-
-    function closeAdminDashboard() {
-      document.getElementById('admin-dashboard').classList.add('hidden');
-      adminSelectedInquiry = null;
-    }
-
-    function switchAdminTab(tab) {
-      // Update sidebar/tabs
-      document.querySelectorAll('.admin-tab').forEach(btn => {
-        // Desktop styling
-        btn.classList.remove('bg-white/10');
-        // Mobile styling
-        btn.classList.remove('border-accent-blue', 'text-white');
-        btn.classList.add('border-transparent', 'text-white/60');
-        
-        if (btn.dataset.tab === tab) {
-          // Desktop
-          if (window.innerWidth >= 768) {
-            btn.classList.add('bg-white/10');
-          }
-          // Mobile
-          btn.classList.remove('border-transparent', 'text-white/60');
-          btn.classList.add('border-accent-blue', 'text-white');
-        }
-      });
-      
-      // Update title
-      const titles = {
-        inquiries: 'Inquiry Hub',
-        projects: 'Portfolio Manager',
-        testimonials: 'Testimonial Manager'
-      };
-      const titleEl = document.getElementById('admin-content-title');
-      if (titleEl) titleEl.textContent = titles[tab];
-      
-      // Show/hide panels
-      document.getElementById('admin-inquiries-panel').classList.toggle('hidden', tab !== 'inquiries');
-      document.getElementById('admin-projects-panel').classList.toggle('hidden', tab !== 'projects');
-      document.getElementById('admin-testimonials-panel').classList.toggle('hidden', tab !== 'testimonials');
-      
-      // Reset mobile chat view when switching tabs
-      if (window.innerWidth < 768) {
-        closeMobileChat();
-      }
-    }
-
-    function switchAdminInquiryTab(tab) {
-      // Update tabs
-      document.querySelectorAll('.admin-inquiry-tab').forEach(btn => {
-        btn.classList.remove('border-accent-blue', 'text-white');
-        btn.classList.add('border-transparent', 'text-white/60');
-        
-        if (btn.dataset.tab === tab) {
-          btn.classList.remove('border-transparent', 'text-white/60');
-          btn.classList.add('border-accent-blue', 'text-white');
-        }
-      });
-      
-      // Show/hide content
-      document.getElementById('admin-chat-messages-tab').classList.toggle('hidden', tab !== 'chat');
-      document.getElementById('admin-progress-tab').classList.toggle('hidden', tab !== 'progress');
-      
-      if (tab === 'progress') renderAdminProgressUpdates();
-    }
-
-    function renderAdminInquiries() {
-      const container = document.getElementById('inquiry-list');
-      const inquiries = allData.filter(d => d.type === 'inquiry');
-      
-      if (inquiries.length === 0) {
-        container.innerHTML = '<p class="text-white/40 text-center py-8">No inquiries yet</p>';
-        return;
-      }
-      
-      // Calculate unread messages for each inquiry
-      inquiries.forEach(inq => {
-        const messages = allData.filter(d => d.type === 'chat' && d.chat_inquiry_id === inq.inquiry_id && d.sender === 'client');
-        inq.unreadCount = messages.length;
-      });
-      
-      container.innerHTML = inquiries.map(inq => `
-        <button onclick="selectInquiry('${inq.inquiry_id}')" class="w-full glass rounded-xl p-4 text-left hover:bg-white/10 transition-colors ${adminSelectedInquiry === inq.inquiry_id ? 'ring-2 ring-accent-blue' : ''}">
-          <div class="flex items-center justify-between mb-2">
-            <span class="font-mono text-sm text-accent-blue">${inq.inquiry_id}</span>
-            ${inq.unreadCount > 0 ? `<span class="bg-accent-blue text-xs px-2 py-0.5 rounded-full unread-indicator">${inq.unreadCount}</span>` : ''}
-          </div>
-          <div class="font-medium truncate">${escapeHtml(inq.client_name)}</div>
-          <div class="flex items-center justify-between mt-2">
-            <span class="text-xs text-white/60">${inq.plan}</span>
-            <span class="text-xs status-${inq.status.toLowerCase()}">${inq.status}</span>
-          </div>
-        </button>
-      `).join('');
-    }
-
-    function selectInquiry(inquiryId) {
-      adminSelectedInquiry = inquiryId;
-      
-      const inquiry = allData.find(d => d.type === 'inquiry' && d.inquiry_id === inquiryId);
-      if (!inquiry) return;
-      
-      document.getElementById('admin-chat-placeholder').classList.add('hidden');
-      document.getElementById('admin-chat-area').classList.remove('hidden');
-      
-      document.getElementById('admin-chat-id').textContent = inquiry.inquiry_id;
-      document.getElementById('admin-chat-client').textContent = inquiry.client_name;
-      document.getElementById('admin-status-select').value = inquiry.status;
-      
-      // Switch to chat tab by default
-      switchAdminInquiryTab('chat');
-      
-      // On mobile, hide the inquiry list and show the chat
-      if (window.innerWidth < 768) {
-        document.getElementById('inquiry-list-container').classList.add('hidden');
-      }
-      
-      renderAdminChat();
-      renderAdminProgressUpdates();
-      renderAdminInquiries();
-    }
-
-    function closeMobileChat() {
-      // Only works on mobile - returns to inquiry list
-      if (window.innerWidth < 768) {
-        document.getElementById('inquiry-list-container').classList.remove('hidden');
-        document.getElementById('admin-chat-area').classList.add('hidden');
-        document.getElementById('admin-chat-placeholder').classList.remove('hidden');
-        adminSelectedInquiry = null;
-      }
-    }
-
-    function renderAdminChat() {
-      const container = document.getElementById('admin-chat-messages');
-      const messages = allData.filter(d => d.type === 'chat' && d.chat_inquiry_id === adminSelectedInquiry);
-      
-      messages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
-      
-      if (messages.length === 0) {
-        container.innerHTML = '<p class="text-white/40 text-center py-8">No messages yet</p>';
-        return;
-      }
-      
-      container.innerHTML = messages.map(msg => `
-        <div class="flex ${msg.sender === 'admin' ? 'justify-end' : 'justify-start'}">
-          <div class="${msg.sender === 'admin' ? 'chat-bubble-client' : 'chat-bubble-admin'} rounded-2xl px-4 py-3 max-w-md">
-            <p class="text-sm">${escapeHtml(msg.message)}</p>
-            <span class="text-xs text-white/40 mt-1 block">${formatTime(msg.timestamp)}</span>
-          </div>
-        </div>
-      `).join('');
-      
-      container.scrollTop = container.scrollHeight;
-    }
-
-    async function sendAdminMessage(e) {
-      e.preventDefault();
-      
-      const input = document.getElementById('admin-message-input');
-      const message = input.value.trim();
-      if (!message || !adminSelectedInquiry) return;
-      
-      const sendBtn = document.getElementById('admin-send-btn');
-      sendBtn.disabled = true;
-      sendBtn.textContent = 'Sending...';
-      
-      const result = await window.dataSdk.create({
-        type: 'chat',
-        chat_inquiry_id: adminSelectedInquiry,
-        sender: 'admin',
-        message: message,
-        timestamp: new Date().toISOString()
-      });
-      
-      sendBtn.disabled = false;
-      sendBtn.textContent = 'Send';
-      
-      if (result.isOk) {
-        input.value = '';
-      } else {
-        showToast('Failed to send message', 'error');
-      }
-    }
-
-    async function updateInquiryStatus() {
-      const status = document.getElementById('admin-status-select').value;
-      const inquiry = allData.find(d => d.type === 'inquiry' && d.inquiry_id === adminSelectedInquiry);
-      
-      if (inquiry) {
-        inquiry.status = status;
-        const result = await window.dataSdk.update(inquiry);
-        if (result.isOk) {
-          showToast('Status updated!');
-        } else {
-          showToast('Failed to update status', 'error');
-        }
-      }
-    }
-
-    // =============================================
-    // ADMIN PROGRESS UPDATES
-    // =============================================
-    function renderAdminProgressUpdates() {
-      const container = document.getElementById('admin-progress-list');
-      const progressUpdates = allData.filter(d => d.type === 'progress' && d.progress_inquiry_id === adminSelectedInquiry);
-      
-      progressUpdates.sort((a, b) => new Date(b.progress_date) - new Date(a.progress_date));
-      
-      if (progressUpdates.length === 0) {
-        container.innerHTML = '<p class="text-white/40 text-center py-8 text-sm">No progress updates yet</p>';
-        return;
-      }
-      
-      container.innerHTML = progressUpdates.map(update => `
-        <div class="glass rounded-xl p-4 flex items-start justify-between">
-          <div class="flex-1">
-            <div class="font-medium text-sm">${escapeHtml(update.progress_title)}</div>
-            <div class="text-xs text-white/60 mt-1">${escapeHtml(update.progress_description)}</div>
-            <div class="text-xs text-white/40 mt-2">${formatDate(update.progress_date)}</div>
-          </div>
-          <button onclick="deleteProgressUpdate('${update.__backendId}')" class="p-2 hover:bg-white/10 rounded-lg transition-colors text-red-400">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-      `).join('');
-    }
-
-    async function addProgressUpdate(e) {
-      e.preventDefault();
-      
-      const title = document.getElementById('progress-title-input').value;
-      const desc = document.getElementById('progress-desc-input').value;
-      
-      const addBtn = document.getElementById('add-progress-btn');
-      addBtn.disabled = true;
-      addBtn.textContent = 'Adding...';
-      
-      const result = await window.dataSdk.create({
-        type: 'progress',
-        progress_inquiry_id: adminSelectedInquiry,
-        progress_title: title,
-        progress_description: desc,
-        progress_date: new Date().toISOString()
-      });
-      
-      addBtn.disabled = false;
-      addBtn.textContent = 'Add Update';
-      
-      if (result.isOk) {
-        document.getElementById('progress-title-input').value = '';
-        document.getElementById('progress-desc-input').value = '';
-        showToast('Progress update added!');
-      } else {
-        showToast('Failed to add update', 'error');
-      }
-    }
-
-    async function deleteProgressUpdate(backendId) {
-      const update = allData.find(d => d.__backendId === backendId);
-      if (update) {
-        const result = await window.dataSdk.delete(update);
-        if (result.isOk) {
-          showToast('Progress update deleted!');
-        } else {
-          showToast('Failed to delete update', 'error');
-        }
-      }
-    }
-
-    // =============================================
-    // ADMIN PROJECTS
-    // =============================================
-    function renderAdminProjects() {
-      const container = document.getElementById('admin-projects-list');
-      const projects = allData.filter(d => d.type === 'project');
-      
-      if (projects.length === 0) {
-        container.innerHTML = '<p class="text-white/40 text-center py-8">No projects added yet</p>';
-        return;
-      }
-      
-      container.innerHTML = projects.map(proj => `
-        <div class="glass rounded-xl p-4 flex items-center justify-between">
-          <div>
-            <div class="font-medium">${escapeHtml(proj.project_title)}</div>
-            <div class="text-sm text-white/60">${escapeHtml(proj.project_category)}</div>
-          </div>
-          <button onclick="deleteProject('${proj.__backendId}')" class="p-2 hover:bg-white/10 rounded-lg transition-colors text-red-400">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-      `).join('');
-    }
-
-    async function addProject(e) {
-      e.preventDefault();
-      
-      const title = document.getElementById('project-title-input').value;
-      const desc = document.getElementById('project-desc-input').value;
-      const category = document.getElementById('project-category-input').value;
-      
-      const addBtn = document.getElementById('add-project-btn');
-      addBtn.disabled = true;
-      addBtn.textContent = 'Adding...';
-      
-      const result = await window.dataSdk.create({
-        type: 'project',
-        project_title: title,
-        project_description: desc,
-        project_category: category
-      });
-      
-      addBtn.disabled = false;
-      addBtn.textContent = 'Add Project';
-      
-      if (result.isOk) {
-        document.getElementById('project-title-input').value = '';
-        document.getElementById('project-desc-input').value = '';
-        document.getElementById('project-category-input').value = '';
-        showToast('Project added!');
-      } else {
-        showToast('Failed to add project', 'error');
-      }
-    }
-
-    async function deleteProject(backendId) {
-      const project = allData.find(d => d.__backendId === backendId);
-      if (project) {
-        const result = await window.dataSdk.delete(project);
-        if (result.isOk) {
-          showToast('Project deleted!');
-        } else {
-          showToast('Failed to delete project', 'error');
-        }
-      }
-    }
-
-    // =============================================
-    // ADMIN TESTIMONIALS
-    // =============================================
-    function renderAdminTestimonials() {
-      const container = document.getElementById('admin-testimonials-list');
-      const testimonials = allData.filter(d => d.type === 'testimonial');
-      
-      if (testimonials.length === 0) {
-        container.innerHTML = '<p class="text-white/40 text-center py-8">No testimonials added yet</p>';
-        return;
-      }
-      
-      container.innerHTML = testimonials.map(test => `
-        <div class="glass rounded-xl p-4 flex items-center justify-between">
-          <div>
-            <div class="font-medium">${escapeHtml(test.testimonial_name)}</div>
-            <div class="text-sm text-white/60">${escapeHtml(test.testimonial_role)}</div>
-          </div>
-          <button onclick="deleteTestimonial('${test.__backendId}')" class="p-2 hover:bg-white/10 rounded-lg transition-colors text-red-400">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-            </svg>
-          </button>
-        </div>
-      `).join('');
-    }
-
-    async function addTestimonial(e) {
-      e.preventDefault();
-      
-      const name = document.getElementById('testimonial-name-input').value;
-      const role = document.getElementById('testimonial-role-input').value;
-      const text = document.getElementById('testimonial-text-input').value;
-      
-      const addBtn = document.getElementById('add-testimonial-btn');
-      addBtn.disabled = true;
-      addBtn.textContent = 'Adding...';
-      
-      const result = await window.dataSdk.create({
-        type: 'testimonial',
-        testimonial_name: name,
-        testimonial_role: role,
-        testimonial_text: text
-      });
-      
-      addBtn.disabled = false;
-      addBtn.textContent = 'Add Testimonial';
-      
-      if (result.isOk) {
-        document.getElementById('testimonial-name-input').value = '';
-        document.getElementById('testimonial-role-input').value = '';
-        document.getElementById('testimonial-text-input').value = '';
-        showToast('Testimonial added!');
-      } else {
-        showToast('Failed to add testimonial', 'error');
-      }
-    }
-
-    async function deleteTestimonial(backendId) {
-      const testimonial = allData.find(d => d.__backendId === backendId);
-      if (testimonial) {
-        const result = await window.dataSdk.delete(testimonial);
-        if (result.isOk) {
-          showToast('Testimonial deleted!');
-        } else {
-          showToast('Failed to delete testimonial', 'error');
-        }
-      }
-    }
-
-    // =============================================
-    // DYNAMIC CONTENT RENDERING
-    // =============================================
-    function renderDynamicContent() {
-      renderDynamicPortfolio();
-      renderDynamicTestimonials();
-    }
-
-    function renderDynamicPortfolio() {
-      const container = document.getElementById('dynamic-portfolio');
-      const projects = allData.filter(d => d.type === 'project');
-      
-      if (projects.length === 0) {
-        container.innerHTML = '';
-        return;
-      }
-      
-      container.innerHTML = projects.map(proj => `
-        <div class="glass rounded-2xl p-4 bento-item flex flex-col justify-end relative overflow-hidden group h-48">
-          <div class="absolute inset-0 bg-gradient-to-t from-bg-dark/90 to-transparent"></div>
-          <div class="relative z-10">
-            <span class="font-mono text-xs text-accent-blue">${escapeHtml(proj.project_category)}</span>
-            <h3 class="text-lg font-bold mt-1">${escapeHtml(proj.project_title)}</h3>
-            <p class="text-white/60 text-sm mt-1 line-clamp-2">${escapeHtml(proj.project_description)}</p>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function renderDynamicTestimonials() {
-      const track = document.getElementById('testimonial-track');
-      const dynamicTestimonials = allData.filter(d => d.type === 'testimonial');
-      
-      // Get static testimonials HTML
-      const staticTestimonials = track.querySelectorAll('.testimonial-item');
-      let staticHTML = '';
-      staticTestimonials.forEach(item => {
-        staticHTML += item.outerHTML;
-      });
-      
-      // Generate dynamic testimonials HTML
-      const dynamicHTML = dynamicTestimonials.map(test => `
-        <div class="testimonial-item flex-shrink-0 w-80 glass rounded-2xl p-6">
-          <div class="flex items-center gap-4 mb-4">
-            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-accent-blue to-accent-purple flex items-center justify-center text-xl font-bold">${test.testimonial_name.charAt(0).toUpperCase()}</div>
-            <div>
-              <h4 class="font-semibold">${escapeHtml(test.testimonial_name)}</h4>
-              <p class="text-white/60 text-sm">${escapeHtml(test.testimonial_role)}</p>
-            </div>
-          </div>
-          <p class="text-white/80 text-sm">"${escapeHtml(test.testimonial_text)}"</p>
-          <div class="flex gap-1 mt-4">
-            <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-            <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
-          </div>
-        </div>
-      `).join('');
-      
-      // Combine and duplicate for infinite scroll
-      const allItems = staticHTML + dynamicHTML;
-      track.innerHTML = allItems + allItems;
-    }
-
-    // =============================================
-    // UTILITY FUNCTIONS
-    // =============================================
-    function escapeHtml(text) {
-      if (!text) return '';
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    function formatTime(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    }
-
-    function formatDate(timestamp) {
-      const date = new Date(timestamp);
-      return date.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' }) + ' ' + date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      document.getElementById('clientPortal').classList.add('hidden');
+      currentProjectId = null;
     }
 
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
-      const toastMessage = document.getElementById('toast-message');
-      const toastIcon = document.getElementById('toast-icon');
-      
-      toastMessage.textContent = message;
-      
-      if (type === 'error') {
-        toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>';
-        toastIcon.classList.remove('text-green-400');
-        toastIcon.classList.add('text-red-400');
-      } else {
-        toastIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>';
-        toastIcon.classList.remove('text-red-400');
-        toastIcon.classList.add('text-green-400');
-      }
-      
+      document.getElementById('toastMessage').textContent = message;
+      document.getElementById('toastIcon').textContent = type === 'success' ? '✓' : '✕';
+      document.getElementById('toastIcon').className = type === 'success' ? 'text-2xl text-green-400' : 'text-2xl text-red-400';
       toast.classList.remove('hidden');
-      
-      setTimeout(() => {
-        toast.classList.add('hidden');
-      }, 3000);
+      setTimeout(() => toast.classList.add('hidden'), 3000);
     }
 
-    // =============================================
-    // INITIALIZE
-    // =============================================
-    initializeApp();
+    async function downloadReceipt() {
+      try {
+        const element = document.getElementById('receiptContent');
+        const canvas = await html2canvas(element, { backgroundColor: '#ffffff', scale: 2 });
+        const link = document.createElement('a');
+        link.download = `ATStudios-${document.getElementById('receiptId').textContent}.png`;
+        link.href = canvas.toDataURL();
+        link.click();
+        showToast('Receipt downloaded!');
+      } catch (error) {
+        showToast('Error downloading receipt', 'error');
+      }
+    }
+
+    async function loadPortfolio() {
+      try {
+        const snapshot = await db.ref('portfolio').get();
+        if (snapshot.exists()) {
+          const portfolio = Object.values(snapshot.val());
+          const container = document.getElementById('dynamicPortfolio');
+          container.innerHTML = portfolio.map(item => `
+            <div class="card animate-scale-in">
+              <div class="text-4xl mb-4">🎨</div>
+              <h3 class="text-2xl font-bold mb-4">${item.title}</h3>
+              <p class="text-gray-400">${item.description}</p>
+              <span class="text-orange-400 text-sm font-mono mt-4 block">${item.category}</span>
+            </div>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Portfolio error:', error);
+      }
+    }
+
+    // ADMIN FUNCTIONS
+    function openAdminPanel() {
+      document.getElementById('adminPanel').classList.remove('hidden');
+      loadAdminData();
+    }
+
+    function closeAdminPanel() {
+      document.getElementById('adminPanel').classList.add('hidden');
+    }
+
+    async function loadAdminData() {
+      try {
+        const snapshot = await db.ref('projects').get();
+        if (snapshot.exists()) {
+          const projects = Object.values(snapshot.val());
+          
+          document.getElementById('totalProjects').textContent = projects.length;
+          document.getElementById('pendingProjects').textContent = projects.filter(p => p.status === 'pending').length;
+          document.getElementById('activeProjects').textContent = projects.filter(p => p.status === 'active').length;
+
+          const tbody = document.getElementById('projectsTable');
+          tbody.innerHTML = projects.reverse().map(p => `
+            <tr>
+              <td class="font-mono text-orange-400">${p.projectId}</td>
+              <td>${p.clientName}</td>
+              <td>${p.clientEmail}</td>
+              <td>${p.plan}</td>
+              <td><span class="status-badge status-${p.status}">${p.status}</span></td>
+              <td>${new Date(p.createdAt).toLocaleDateString()}</td>
+              <td>
+                <select onchange="updateStatus('${p.projectId}', this.value)" class="bg-gray-900 border border-orange-500/20 rounded px-2 py-1 text-sm">
+                  <option value="pending" ${p.status === 'pending' ? 'selected' : ''}>Pending</option>
+                  <option value="active" ${p.status === 'active' ? 'selected' : ''}>Active</option>
+                  <option value="completed" ${p.status === 'completed' ? 'selected' : ''}>Completed</option>
+                </select>
+              </td>
+            </tr>
+          `).join('');
+        }
+      } catch (error) {
+        showToast('Error loading admin data', 'error');
+      }
+    }
+
+    async function updateStatus(projectId, newStatus) {
+      try {
+        await db.ref('projects/' + projectId).update({ status: newStatus });
+        showToast('Status updated!', 'success');
+        loadAdminData();
+      } catch (error) {
+        showToast('Error updating status', 'error');
+      }
+    }
+
+    async function addPortfolio(e) {
+      e.preventDefault();
+      const title = document.getElementById('portfolioTitle').value;
+      const category = document.getElementById('portfolioCategory').value;
+      const description = document.getElementById('portfolioDescription').value;
+      const id = 'portfolio-' + Date.now();
+
+      try {
+        await db.ref('portfolio/' + id).set({ title, category, description, id });
+        showToast('Portfolio item added!', 'success');
+        document.getElementById('portfolioForm').reset();
+        loadPortfolio();
+      } catch (error) {
+        showToast('Error adding portfolio', 'error');
+      }
+    }
+
+    function refreshProjects() {
+      loadAdminData();
+      showToast('Projects refreshed!', 'success');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadPortfolio();
+    });
   </script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9bdba69dd0be9fa4',t:'MTc2ODM3ODE2My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>
